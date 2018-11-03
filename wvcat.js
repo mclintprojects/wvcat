@@ -1,18 +1,20 @@
 (function(window) {
 	window.wvcat = this;
 
-	const keywords = ['click', 'type', 'on'];
-
 	this.controls = [];
 
 	this.initialize = function(options) {
 		this.options = options || { lang: 'en-US' };
+
+		findControllableElementsInDocument();
+
 		if ('webkitSpeechRecognition' in window) {
 			attachRecognitionContainerToDocument();
 			startSpeechRecognizer();
-			findControllableElementsInDocument();
 		} else console.error('This browser does not support voice control.');
 	};
+
+	this.execute = command => executeCommand(command);
 
 	function attachRecognitionContainerToDocument() {
 		const card = document.createElement('div');
@@ -31,10 +33,13 @@
 			let e = elements[i];
 
 			if (e.dataset.wvcatId) {
+				const uuid = getUUID();
+				e.classList.add(uuid);
 				controls.push({
-					identifier: e.dataset.wvcatId,
+					identifier: e.dataset.wvcatId.replace('-', ' '),
 					name: e.localName,
-					type: e.type
+					type: e.type,
+					uuid
 				});
 			}
 		}
@@ -63,21 +68,88 @@
 		}
 
 		setText(`Executing command -> [${transcript}]`);
-		parseCommand(transcript);
+		executeCommand(transcript);
 		transcript = '';
 	}
 
-	function parseCommand(transcript) {
-		let tokens = [];
-		const commands = transcript.split(' ');
-		commands.forEach(c => tokens.push(findToken(c)));
-		console.log(tokens);
+	function executeCommand(transcript) {
+		transcript = transcript.toLowerCase();
+		const words = transcript.split(' ');
+
+		try {
+			switch (words[0]) {
+				case 'type':
+					executeTypingIntent(words);
+					break;
+
+				case 'click':
+					executeClickIntent(words);
+
+				default:
+					throw new Error('Invalid command.');
+			}
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
-	function findToken(lexeme) {
-		lexeme = lexeme.toLowerCase();
+	// Intent executors
+	function executeTypingIntent(words) {
+		if (hasValidSemantics('type', words)) {
+			let whatToTypeEndIndex = words.indexOf('into');
 
-		if (keywords.includes(lexeme)) return { name: 'keyword', value: lexeme };
-		else return { name: 'literal', value: lexeme };
+			let whatToType = words.substring(1, whatToTypeEndIndex - 1, ' ');
+			let controlName = words.substring(
+				whatToTypeEndIndex + 1,
+				words.length - 1
+			);
+
+			const control = findControl(controlName);
+			if (control && control.localName == 'input') control.value = whatToType;
+		} else throw new Error('Invalid type intent command.');
+	}
+
+	function executeClickIntent(words) {
+		if (hasValidSemantics('click', words)) {
+			let controlName = words.substring(2);
+
+			const control = findControl(controlName);
+			if (control) control.click();
+		} else throw new Error('Invalid click intent command.');
+	}
+
+	function hasValidSemantics(type, words) {
+		switch (type) {
+			case 'click':
+				return words[1] == 'on' && words.length > 2;
+
+			case 'type':
+				return words.includes('into') && words.length >= 4;
+		}
+	}
+
+	function findControl(identifier) {
+		const control = controls.find(c => c.identifier == identifier);
+		if (control) return document.getElementsByClassName(control.uuid)[0];
+		return null;
+	}
+
+	function getUUID() {
+		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			var r = (Math.random() * 16) | 0,
+				v = c == 'x' ? r : (r & 0x3) | 0x8;
+			return v.toString(16);
+		});
 	}
 })(window);
+
+Array.prototype.substring = function(start, end, join = '') {
+	end = end || this.length - 1;
+	let word = '';
+	for (start; start <= end; start++) {
+		if (start != end) word += `${this[start]} ${join}`;
+		else word += `${this[start]}`;
+	}
+
+	return word;
+};
