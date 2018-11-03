@@ -1,6 +1,8 @@
 (function(window) {
 	window.wvcat = this;
 
+	const keywords = ['click', 'type', 'on'];
+
 	this.controls = [];
 
 	this.initialize = function(options) {
@@ -41,7 +43,7 @@
 	}
 
 	function startSpeechRecognizer() {
-		setText('Listening for commands...');
+		setText('Listening...');
 		this.recognizer = new webkitSpeechRecognition();
 		recognizer.lang = this.options.lang;
 		recognizer.start();
@@ -61,7 +63,21 @@
 		}
 
 		setText(`Executing command -> [${transcript}]`);
+		parseCommand(transcript);
 		transcript = '';
-		window.setTimeout(startSpeechRecognizer, 2000);
+	}
+
+	function parseCommand(transcript) {
+		let tokens = [];
+		const commands = transcript.split(' ');
+		commands.forEach(c => tokens.push(findToken(c)));
+		console.log(tokens);
+	}
+
+	function findToken(lexeme) {
+		lexeme = lexeme.toLowerCase();
+
+		if (keywords.includes(lexeme)) return { name: 'keyword', value: lexeme };
+		else return { name: 'literal', value: lexeme };
 	}
 })(window);
