@@ -96,7 +96,7 @@
 	// Intent executors
 	function executeTypingIntent(words) {
 		if (hasValidSemantics('type', words)) {
-			let whatToTypeEndIndex = words.indexOf('into');
+			let whatToTypeEndIndex = words.lastIndexOf('into');
 
 			let whatToType = words.substring(1, whatToTypeEndIndex - 1, ' ');
 			let controlName = words.substring(
