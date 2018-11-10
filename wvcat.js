@@ -88,6 +88,10 @@
 					executeFocusIntent(words);
 					break;
 
+				case 'goto':
+					executeNavigateToLinkIntent(words);
+					break;
+
 				default:
 					throw new Error('Invalid command.');
 			}
@@ -97,6 +101,31 @@
 	}
 
 	// ------- Intent executors
+
+	function executeNavigateToLinkIntent(words) {
+		if (hasValidSemantics('link', words)) {
+			if (!words.includes('in')) {
+				let controlName = words.substring(1);
+				const control = findControl(controlName);
+				if (control) control.click();
+			} else {
+				let indexOfIn = words.lastIndexOf('in');
+				let controlName = words.substring(1, indexOfIn - 1);
+				let target = words.substring(indexOfIn + 1);
+
+				const control = findControl(controlName);
+				if (
+					control &&
+					control.localName == 'a' &&
+					(target == 'same tab' || target == 'new tab')
+				) {
+					target == 'same tab'
+						? window.location.replace(control.href)
+						: window.open(control.href);
+				}
+			}
+		} else throw new Error('Invalid link navigation intent command.');
+	}
 
 	function executeFocusIntent(words) {
 		if (hasValidSemantics('focus', words)) {
@@ -136,6 +165,9 @@
 
 			case 'type':
 				return words.includes('into') && words.length >= 4;
+
+			case 'link':
+				return words.length >= 2;
 		}
 	}
 
