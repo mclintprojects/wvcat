@@ -43,8 +43,6 @@
 				});
 			}
 		}
-
-		console.log(controls);
 	}
 
 	function startSpeechRecognizer() {
@@ -84,6 +82,11 @@
 
 				case 'click':
 					executeClickIntent(words);
+					break;
+
+				case 'focus':
+					executeFocusIntent(words);
+					break;
 
 				default:
 					throw new Error('Invalid command.');
@@ -93,16 +96,22 @@
 		}
 	}
 
-	// Intent executors
+	// ------- Intent executors
+
+	function executeFocusIntent(words) {
+		if (hasValidSemantics('focus', words)) {
+			let controlName = words.substring(2);
+			const control = findControl(controlName);
+			if (control) control.focus();
+		} else throw new Error('Invalid focus intent command.');
+	}
+
 	function executeTypingIntent(words) {
 		if (hasValidSemantics('type', words)) {
 			let whatToTypeEndIndex = words.lastIndexOf('into');
 
 			let whatToType = words.substring(1, whatToTypeEndIndex - 1, ' ');
-			let controlName = words.substring(
-				whatToTypeEndIndex + 1,
-				words.length - 1
-			);
+			let controlName = words.substring(whatToTypeEndIndex + 1);
 
 			const control = findControl(controlName);
 			if (control && control.localName == 'input') control.value = whatToType;
@@ -112,15 +121,17 @@
 	function executeClickIntent(words) {
 		if (hasValidSemantics('click', words)) {
 			let controlName = words.substring(2);
-
 			const control = findControl(controlName);
 			if (control) control.click();
 		} else throw new Error('Invalid click intent command.');
 	}
 
+	// ------- Intent executors
+
 	function hasValidSemantics(type, words) {
 		switch (type) {
 			case 'click':
+			case 'focus':
 				return words[1] == 'on' && words.length > 2;
 
 			case 'type':

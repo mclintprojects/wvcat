@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>WVCAT Test</title>
+		<script src="wvcat.js"></script>
+	</head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>WVCAT Test</title>
-    <script src="wvcat.js"></script>
-</head>
+	<body>
+		<input
+			class="wvcat-element"
+			type="email"
+			placeholder="Email address"
+			data-wvcat-id="email-address"
+		/>
+		<button
+			class="wvcat-element"
+			data-wvcat-id="click-me"
+			onclick="alert('i was clicked')"
+		>
+			Click me
+		</button>
 
-<body>
-    <input class="wvcat-element" type="email" placeholder="Email address" data-wvcat-id="email-address" />
-    <button class="wvcat-element" data-wvcat-id="click-me" onclick="alert('i was clicked')">Click me</button>
-
-    <script>
-        wvcat.initialize();
-    </script>
-</body>
-
+		<script>
+			wvcat.initialize();
+		</script>
+	</body>
 </html>
