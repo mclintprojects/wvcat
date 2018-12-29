@@ -2,6 +2,7 @@
 	window.wvcat = this;
 
 	this.controls = [];
+	this.isListening = false;
 
 	this.initialize = function(options) {
 		this.options = options || { lang: 'en-US' };
@@ -18,13 +19,22 @@
 
 	function attachRecognitionContainerToDocument() {
 		const card = document.createElement('div');
-		card.classList.add('wvcat-recognition-container');
+		card.classList.add('wvcat-container');
 
 		this.recognitionText = document.createElement('p');
 		recognitionText.appendChild(document.createTextNode('Sample recognition'));
 		card.appendChild(recognitionText);
 
+		this.listenBtn = document.createElement('button');
+		listenBtn.textContent = 'Listen';
+		listenBtn.addEventListener('click', listenClicked);
+		card.appendChild(listenBtn);
+
 		document.body.appendChild(card);
+	}
+
+	function listenClicked() {
+		alert('Listen clicked!');
 	}
 
 	function findControllableElementsInDocument() {
@@ -43,6 +53,8 @@
 				});
 			}
 		}
+
+		console.log(controls);
 	}
 
 	function startSpeechRecognizer() {
@@ -51,6 +63,7 @@
 		recognizer.lang = this.options.lang;
 		recognizer.start();
 		recognizer.onresult = generateTranscript;
+		this.isListening = true;
 	}
 
 	function setText(text) {
@@ -68,6 +81,7 @@
 		setText(`Executing command -> [${transcript}]`);
 		executeCommand(transcript);
 		transcript = '';
+		window.setTimeout(setText(''), 1000);
 	}
 
 	function executeCommand(transcript) {
@@ -144,7 +158,7 @@
 
 			const control = findControl(controlName);
 			if (control && control.localName == 'input') control.value = whatToType;
-		} else throw new Error('Invalid type intent command.');
+		} else throw new Error('Invalid type-in intent command.');
 	}
 
 	function executeClickIntent(words) {
