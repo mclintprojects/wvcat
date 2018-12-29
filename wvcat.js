@@ -135,7 +135,7 @@
 					throw new Error('Invalid command.');
 			}
 		} catch (err) {
-			console.log(err);
+			setText(err.message);
 		}
 	}
 
@@ -148,7 +148,9 @@
 		)
 			this.currentControl.play();
 		else
-			setText('Currently selected element is not a HTML audio/video element.');
+			throw new Error(
+				'Currently selected element is not a HTML audio/video element.'
+			);
 	}
 
 	function executePauseIntent() {
@@ -158,7 +160,9 @@
 		)
 			this.currentControl.pause();
 		else
-			setText('Currently selected element is not a HTML audio/video element.');
+			throw new Error(
+				'Currently selected element is not a HTML audio/video element.'
+			);
 	}
 
 	function executePreviousElementIntent() {
