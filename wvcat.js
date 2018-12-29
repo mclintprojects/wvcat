@@ -85,7 +85,7 @@
 		}
 
 		executeCommand(transcript);
-		setText(`Executed command -> [${transcript}]`);
+		setText(`Executed command successfully.`);
 		transcript = '';
 	}
 
@@ -123,14 +123,6 @@
 					executeNavigateToLinkIntent(words);
 					break;
 
-				case 'play':
-					executePlayIntent(words);
-					break;
-
-				case 'pause':
-					executePauseIntent(words);
-					break;
-
 				default:
 					throw new Error('Invalid command.');
 			}
@@ -140,30 +132,6 @@
 	}
 
 	// ------- Intent executors
-
-	function executePlayIntent() {
-		if (
-			this.currentControl.localName == 'a' ||
-			this.currentControl.localName == 'video'
-		)
-			this.currentControl.play();
-		else
-			throw new Error(
-				'Currently selected element is not a HTML audio/video element.'
-			);
-	}
-
-	function executePauseIntent() {
-		if (
-			this.currentControl.localName == 'a' ||
-			this.currentControl.localName == 'video'
-		)
-			this.currentControl.pause();
-		else
-			throw new Error(
-				'Currently selected element is not a HTML audio/video element.'
-			);
-	}
 
 	function executePreviousElementIntent() {
 		this.currentControl.classList.remove('wvcat-highlight');
