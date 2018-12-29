@@ -21,14 +21,16 @@
 	this.execute = command => executeCommand(command);
 
 	function highlightFirstControllableElement() {
-		currentControl = findControlByUUID(controls[0].uuid);
-		currentControl.classList.add('wvcat-highlight');
+		this.currentControl = findControlByUUID(controls[0].uuid);
+		this.currentControl.classList.add('wvcat-highlight');
 	}
 
 	function setCurrentControl() {
-		currentControl = findControlByUUID(controls[this.currentControlIndex].uuid);
-		currentControl.classList.add('wvcat-highlight');
-		currentControl.focus();
+		this.currentControl = findControlByUUID(
+			controls[this.currentControlIndex].uuid
+		);
+		this.currentControl.classList.add('wvcat-highlight');
+		this.currentControl.focus();
 	}
 
 	function attachRecognitionContainerToDocument() {
@@ -37,8 +39,8 @@
 		card.classList.add('wvcat-container');
 
 		this.recognitionText = document.createElement('p');
-		recognitionText.appendChild(document.createTextNode(''));
-		card.appendChild(recognitionText);
+		this.recognitionText.appendChild(document.createTextNode(''));
+		card.appendChild(this.recognitionText);
 
 		document.body.appendChild(card);
 	}
@@ -72,7 +74,7 @@
 	}
 
 	function setText(text) {
-		recognitionText.innerText = text;
+		this.recognitionText.innerText = text;
 	}
 
 	function generateTranscript({ results }) {
@@ -121,6 +123,14 @@
 					executeNavigateToLinkIntent(words);
 					break;
 
+				case 'play':
+					executePlayIntent(words);
+					break;
+
+				case 'pause':
+					executePauseIntent(words);
+					break;
+
 				default:
 					throw new Error('Invalid command.');
 			}
@@ -130,6 +140,26 @@
 	}
 
 	// ------- Intent executors
+
+	function executePlayIntent() {
+		if (
+			this.currentControl.localName == 'a' ||
+			this.currentControl.localName == 'video'
+		)
+			this.currentControl.play();
+		else
+			setText('Currently selected element is not a HTML audio/video element.');
+	}
+
+	function executePauseIntent() {
+		if (
+			this.currentControl.localName == 'a' ||
+			this.currentControl.localName == 'video'
+		)
+			this.currentControl.pause();
+		else
+			setText('Currently selected element is not a HTML audio/video element.');
+	}
 
 	function executePreviousElementIntent() {
 		this.currentControl.classList.remove('wvcat-highlight');
@@ -178,38 +208,31 @@
 	function executeTypingIntent(action, words) {
 		let whatToType = words.substring(1);
 
-		if (currentControl.localName == 'input') {
+		if (this.currentControl.localName == 'input') {
 			switch (action) {
 				case 'type':
-					currentControl.value = whatToType;
+					this.currentControl.value = whatToType;
 					break;
 
 				case 'append':
-					currentControl.value += ` ${whatToType}`;
+					this.currentControl.value += ` ${whatToType}`;
 					break;
 
 				case 'clear':
-					currentControl.value = '';
+					this.currentControl.value = '';
 					break;
 			}
-		} else throw Error('Current control is not an input element.');
+		} else throw Error('Currently selected element is not an input element.');
 	}
 
 	function executeClickIntent() {
-		currentControl.click();
+		this.currentControl.click();
 	}
 
 	// ------- Intent executors
 
 	function hasValidSemantics(type, words) {
 		switch (type) {
-			case 'click':
-			case 'focus':
-				return words[1] == 'on' && words.length > 2;
-
-			case 'type':
-				return words.includes('into') && words.length >= 4;
-
 			case 'link':
 				return words.length >= 2;
 		}
