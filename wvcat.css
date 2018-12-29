@@ -24,11 +24,3 @@
 	cursor: pointer;
 	margin-left: 16px;
 }
-
-.wvcat-container button:hover {
-	background: rgb(255, 130, 108);
-}
-
-.wvcat-highlight {
-	border: 1px solid lightblue;
-}

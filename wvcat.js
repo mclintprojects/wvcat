@@ -39,16 +39,7 @@
 		recognitionText.appendChild(document.createTextNode(''));
 		card.appendChild(recognitionText);
 
-		this.listenBtn = document.createElement('button');
-		listenBtn.textContent = 'Listen';
-		listenBtn.addEventListener('click', listenClicked);
-		card.appendChild(listenBtn);
-
 		document.body.appendChild(card);
-	}
-
-	function listenClicked() {
-		startSpeechRecognizer();
 	}
 
 	function findControllableElementsInDocument() {
@@ -143,7 +134,7 @@
 		this.currentControl.classList.remove('wvcat-highlight');
 
 		--this.currentControlIndex;
-		if (this.currentControlIndex <= 0)
+		if (this.currentControlIndex < 0)
 			this.currentControlIndex = controls.length - 1;
 
 		setCurrentControl();
