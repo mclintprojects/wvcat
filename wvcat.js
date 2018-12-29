@@ -108,15 +108,19 @@
 					break;
 
 				case 'type':
-					executeTypingIntent(words);
+					executeTypingIntent('type', words);
+					break;
+
+				case 'append':
+					executeTypingIntent('append', words);
+					break;
+
+				case 'clear':
+					executeTypingIntent('clear', words);
 					break;
 
 				case 'click':
-					executeClickIntent(words);
-					break;
-
-				case 'focus':
-					executeFocusIntent(words);
+					executeClickIntent();
 					break;
 
 				case 'goto':
@@ -177,26 +181,26 @@
 		} else throw new Error('Invalid link navigation intent command.');
 	}
 
-	function executeFocusIntent(words) {
-		if (hasValidSemantics('focus', words)) {
-			let controlName = words.substring(2);
-			const control = findControlById(controlName);
-			if (control) control.focus();
-		} else throw new Error('Invalid focus intent command.');
-	}
-
-	function executeTypingIntent(words) {
+	function executeTypingIntent(action, words) {
 		let whatToType = words.substring(1);
-		if (currentControl.localName == 'input') currentControl.value = whatToType;
-		else throw Error('Current control is not an input element.');
+
+		if (currentControl.localName == 'input') {
+			switch (action) {
+				case 'type':
+					currentControl.value = whatToType;
+					break;
+
+				case 'append':
+					currentControl.value += ` ${whatToType}`;
+
+				case 'clear':
+					currentControl.value = '';
+			}
+		} else throw Error('Current control is not an input element.');
 	}
 
-	function executeClickIntent(words) {
-		if (hasValidSemantics('click', words)) {
-			let controlName = words.substring(2);
-			const control = findControlById(controlName);
-			if (control) control.click();
-		} else throw new Error('Invalid click intent command.');
+	function executeClickIntent() {
+		currentControl.click();
 	}
 
 	// ------- Intent executors
