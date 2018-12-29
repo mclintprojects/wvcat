@@ -33,6 +33,7 @@
 
 	function attachRecognitionContainerToDocument() {
 		const card = document.createElement('div');
+		card.setAttribute('role', 'alert');
 		card.classList.add('wvcat-container');
 
 		this.recognitionText = document.createElement('p');

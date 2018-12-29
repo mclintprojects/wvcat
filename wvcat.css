@@ -1,6 +1,6 @@
 .wvcat-container {
 	background: white;
-	border: 2px solid tomato;
+	border: 2px solid lightblue;
 	border-radius: 5px;
 	position: fixed;
 	bottom: 16px;
@@ -9,18 +9,4 @@
 	margin: 0 auto;
 	padding: 16px;
 	font-family: 'Arial';
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.wvcat-container button {
-	height: 33px;
-	width: 100px;
-	background: tomato;
-	border: none;
-	color: white;
-	border-radius: 3px;
-	cursor: pointer;
-	margin-left: 16px;
 }
