@@ -14,6 +14,7 @@
 
 		if ('webkitSpeechRecognition' in window) {
 			attachRecognitionContainerToDocument();
+			startSpeechRecognizer();
 		} else console.error('This browser does not support voice control.');
 	};
 
@@ -74,6 +75,7 @@
 		recognizer.lang = this.options.lang;
 		recognizer.start();
 		recognizer.onresult = generateTranscript;
+		recognizer.onend = () => recognizer.start();
 		this.isListening = true;
 	}
 
@@ -192,9 +194,11 @@
 
 				case 'append':
 					currentControl.value += ` ${whatToType}`;
+					break;
 
 				case 'clear':
 					currentControl.value = '';
+					break;
 			}
 		} else throw Error('Current control is not an input element.');
 	}
