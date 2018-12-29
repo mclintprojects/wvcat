@@ -24,6 +24,12 @@
 		currentControl.classList.add('wvcat-highlight');
 	}
 
+	function setCurrentControl() {
+		currentControl = findControlByUUID(controls[this.currentControlIndex].uuid);
+		currentControl.classList.add('wvcat-highlight');
+		currentControl.focus();
+	}
+
 	function attachRecognitionContainerToDocument() {
 		const card = document.createElement('div');
 		card.classList.add('wvcat-container');
@@ -134,8 +140,7 @@
 		if (this.currentControlIndex <= 0)
 			this.currentControlIndex = controls.length - 1;
 
-		currentControl = findControlByUUID(controls[this.currentControlIndex].uuid);
-		currentControl.classList.add('wvcat-highlight');
+		setCurrentControl();
 	}
 
 	function executeNextElementIntent() {
@@ -144,9 +149,7 @@
 		++this.currentControlIndex;
 		if (this.currentControlIndex >= this.controls.length)
 			this.currentControlIndex = 0;
-
-		currentControl = findControlByUUID(controls[this.currentControlIndex].uuid);
-		currentControl.classList.add('wvcat-highlight');
+		setCurrentControl();
 	}
 
 	function executeNavigateToLinkIntent(words) {
@@ -183,15 +186,9 @@
 	}
 
 	function executeTypingIntent(words) {
-		if (hasValidSemantics('type', words)) {
-			let whatToTypeEndIndex = words.lastIndexOf('into');
-
-			let whatToType = words.substring(1, whatToTypeEndIndex - 1, ' ');
-			let controlName = words.substring(whatToTypeEndIndex + 1);
-
-			const control = findControlById(controlName);
-			if (control && control.localName == 'input') control.value = whatToType;
-		} else throw new Error('Invalid type-in intent command.');
+		let whatToType = words.substring(1);
+		if (currentControl.localName == 'input') currentControl.value = whatToType;
+		else throw Error('Current control is not an input element.');
 	}
 
 	function executeClickIntent(words) {
@@ -230,11 +227,14 @@
 	}
 
 	function getUUID() {
-		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-			var r = (Math.random() * 16) | 0,
-				v = c == 'x' ? r : (r & 0x3) | 0x8;
-			return v.toString(16);
-		});
+		return (
+			'wvcat-' +
+			'xxxxxxxx'.replace(/[xy]/g, function(c) {
+				var r = (Math.random() * 16) | 0,
+					v = c == 'x' ? r : (r & 0x3) | 0x8;
+				return v.toString(16);
+			})
+		);
 	}
 })(window);
 
