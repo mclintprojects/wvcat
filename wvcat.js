@@ -3,26 +3,33 @@
 
 	this.controls = [];
 	this.isListening = false;
+	this.currentControl = null;
+	this.currentControlIndex = 0;
 
 	this.initialize = function(options) {
 		this.options = options || { lang: 'en-US' };
 
 		findControllableElementsInDocument();
+		highlightFirstControllableElement();
 
 		if ('webkitSpeechRecognition' in window) {
 			attachRecognitionContainerToDocument();
-			startSpeechRecognizer();
 		} else console.error('This browser does not support voice control.');
 	};
 
 	this.execute = command => executeCommand(command);
+
+	function highlightFirstControllableElement() {
+		currentControl = findControlByUUID(controls[0].uuid);
+		currentControl.classList.add('wvcat-highlight');
+	}
 
 	function attachRecognitionContainerToDocument() {
 		const card = document.createElement('div');
 		card.classList.add('wvcat-container');
 
 		this.recognitionText = document.createElement('p');
-		recognitionText.appendChild(document.createTextNode('Sample recognition'));
+		recognitionText.appendChild(document.createTextNode(''));
 		card.appendChild(recognitionText);
 
 		this.listenBtn = document.createElement('button');
@@ -34,7 +41,7 @@
 	}
 
 	function listenClicked() {
-		alert('Listen clicked!');
+		startSpeechRecognizer();
 	}
 
 	function findControllableElementsInDocument() {
@@ -53,8 +60,6 @@
 				});
 			}
 		}
-
-		console.log(controls);
 	}
 
 	function startSpeechRecognizer() {
@@ -71,17 +76,15 @@
 	}
 
 	function generateTranscript({ results }) {
-		setText('Parsing command..');
 		let transcript = '';
 		for (let i = 0; i < results.length; i++) {
 			const result = results[i];
 			if (result.isFinal) transcript += result[0].transcript;
 		}
 
-		setText(`Executing command -> [${transcript}]`);
 		executeCommand(transcript);
+		setText(`Executed command -> [${transcript}]`);
 		transcript = '';
-		window.setTimeout(setText(''), 1000);
 	}
 
 	function executeCommand(transcript) {
@@ -90,6 +93,14 @@
 
 		try {
 			switch (words[0]) {
+				case 'next':
+					executeNextElementIntent();
+					break;
+
+				case 'previous':
+					executePreviousElementIntent();
+					break;
+
 				case 'type':
 					executeTypingIntent(words);
 					break;
@@ -116,18 +127,40 @@
 
 	// ------- Intent executors
 
+	function executePreviousElementIntent() {
+		this.currentControl.classList.remove('wvcat-highlight');
+
+		--this.currentControlIndex;
+		if (this.currentControlIndex <= 0)
+			this.currentControlIndex = controls.length - 1;
+
+		currentControl = findControlByUUID(controls[this.currentControlIndex].uuid);
+		currentControl.classList.add('wvcat-highlight');
+	}
+
+	function executeNextElementIntent() {
+		this.currentControl.classList.remove('wvcat-highlight');
+
+		++this.currentControlIndex;
+		if (this.currentControlIndex >= this.controls.length)
+			this.currentControlIndex = 0;
+
+		currentControl = findControlByUUID(controls[this.currentControlIndex].uuid);
+		currentControl.classList.add('wvcat-highlight');
+	}
+
 	function executeNavigateToLinkIntent(words) {
 		if (hasValidSemantics('link', words)) {
 			if (!words.includes('in')) {
 				let controlName = words.substring(1);
-				const control = findControl(controlName);
+				const control = findControlById(controlName);
 				if (control) control.click();
 			} else {
 				let indexOfIn = words.lastIndexOf('in');
 				let controlName = words.substring(1, indexOfIn - 1);
 				let target = words.substring(indexOfIn + 1);
 
-				const control = findControl(controlName);
+				const control = findControlById(controlName);
 				if (
 					control &&
 					control.localName == 'a' &&
@@ -144,7 +177,7 @@
 	function executeFocusIntent(words) {
 		if (hasValidSemantics('focus', words)) {
 			let controlName = words.substring(2);
-			const control = findControl(controlName);
+			const control = findControlById(controlName);
 			if (control) control.focus();
 		} else throw new Error('Invalid focus intent command.');
 	}
@@ -156,7 +189,7 @@
 			let whatToType = words.substring(1, whatToTypeEndIndex - 1, ' ');
 			let controlName = words.substring(whatToTypeEndIndex + 1);
 
-			const control = findControl(controlName);
+			const control = findControlById(controlName);
 			if (control && control.localName == 'input') control.value = whatToType;
 		} else throw new Error('Invalid type-in intent command.');
 	}
@@ -164,7 +197,7 @@
 	function executeClickIntent(words) {
 		if (hasValidSemantics('click', words)) {
 			let controlName = words.substring(2);
-			const control = findControl(controlName);
+			const control = findControlById(controlName);
 			if (control) control.click();
 		} else throw new Error('Invalid click intent command.');
 	}
@@ -185,10 +218,15 @@
 		}
 	}
 
-	function findControl(identifier) {
+	function findControlById(identifier) {
 		const control = controls.find(c => c.identifier == identifier);
 		if (control) return document.getElementsByClassName(control.uuid)[0];
 		return null;
+	}
+
+	function findControlByUUID(uuid) {
+		const controls = document.getElementsByClassName(uuid);
+		return controls.length > 0 ? controls[0] : null;
 	}
 
 	function getUUID() {
