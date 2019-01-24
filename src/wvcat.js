@@ -30,14 +30,12 @@
 	};
 
 	// The command matching code is a modified version of Aanyang.js by Tel Atel, under the MIT license.
-	let optionalParam = /\s*\((.*?)\)\s*/g;
 	let namedParam = /(\(\?)?:\w+/g;
 	let splatParam = /\*\w+/g;
 	let escapeRegExp = /[-{}[\]+?.,\\^$|#]/g;
 	function commandToRegExp(command) {
 		command = command
 			.replace(escapeRegExp, '\\$&')
-			.replace(optionalParam, '(?:$1)?')
 			.replace(namedParam, function(match, optional) {
 				return optional ? match : '([^\\s]+)';
 			})
@@ -173,7 +171,7 @@
 						const command = this.customCommands[i];
 						const result = command.regex.exec(transcript);
 						if (result) {
-							command.callback(result.slice(1));
+							command.callback.apply(this, result.slice(1));
 							break;
 						}
 					}
