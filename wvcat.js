@@ -26,6 +26,21 @@
 		this.customCommands.push({ regex, onMatch });
 	};
 
+	let optionalParam = /\s*\((.*?)\)\s*/g;
+	let namedParam = /(\(\?)?:\w+/g;
+	let splatParam = /\*\w+/g;
+	let escapeRegExp = /[-{}[\]+?.,\\^$|#]/g;
+	let commandToRegExp = function(command) {
+		command = command
+			.replace(escapeRegExp, '\\$&')
+			.replace(optionalParam, '(?:$1)?')
+			.replace(namedParam, function(match, optional) {
+				return optional ? match : '([^\\s]+)';
+			})
+			.replace(splatParam, '(.*?)');
+		return new RegExp('^' + command + '$', 'i');
+	};
+
 	function highlightFirstControllableElement() {
 		this.currentControl = findControlByUUID(controls[0].uuid);
 		this.currentControl.classList.add('wvcat-highlight');
@@ -236,7 +251,7 @@
 		return (
 			'wvcat-' +
 			'xxxxxxxx'.replace(/[xy]/g, function(c) {
-				var r = (Math.random() * 16) | 0,
+				let r = (Math.random() * 16) | 0,
 					v = c == 'x' ? r : (r & 0x3) | 0x8;
 				return v.toString(16);
 			})
