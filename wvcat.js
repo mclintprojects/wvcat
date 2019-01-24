@@ -67,6 +67,25 @@
 		this.recognitionText.appendChild(document.createTextNode(''));
 		card.appendChild(this.recognitionText);
 
+		const style = document.createElement('style');
+		style.innerHTML = `.wvcat-container {
+								background: white;
+								border: 2px solid lightblue;
+								border-radius: 5px;
+								position: fixed;
+								bottom: 16px;
+								left: 35%;
+								width: 30%;
+								margin: 0 auto;
+								padding: 16px;
+								font-family: 'Arial';
+							}
+
+							.wvcat-highlight {
+								border: 2px solid lightblue;
+							}`;
+
+		document.head.appendChild(style);
 		document.body.appendChild(card);
 	}
 
