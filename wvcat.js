@@ -21,16 +21,20 @@
 
 	this.execute = command => executeCommand(command);
 
-	this.addCustomCommand = ({ regexString, onMatch }) => {
-		const regex = new RegExp(regexString);
-		this.customCommands.push({ regex, onMatch });
+	this.addCustomCommand = (command, callback) => {
+		const regex = commandToRegExp(command);
+		this.customCommands.push({
+			regex,
+			callback
+		});
 	};
 
+	// The command matching code is a modified version of Aanyang.js by Tel Atel, under the MIT license.
 	let optionalParam = /\s*\((.*?)\)\s*/g;
 	let namedParam = /(\(\?)?:\w+/g;
 	let splatParam = /\*\w+/g;
 	let escapeRegExp = /[-{}[\]+?.,\\^$|#]/g;
-	let commandToRegExp = function(command) {
+	function commandToRegExp(command) {
 		command = command
 			.replace(escapeRegExp, '\\$&')
 			.replace(optionalParam, '(?:$1)?')
@@ -39,7 +43,7 @@
 			})
 			.replace(splatParam, '(.*?)');
 		return new RegExp('^' + command + '$', 'i');
-	};
+	}
 
 	function highlightFirstControllableElement() {
 		this.currentControl = findControlByUUID(controls[0].uuid);
@@ -146,10 +150,14 @@
 					break;
 
 				default:
-					const command = this.customCommands.find(e =>
-						e.regex.match(transcript)
-					);
-					if (command) this.onMatch(generateParams(command, transcript));
+					for (let i = 0; i < this.customCommands.length; i++) {
+						const command = this.customCommands[i];
+						const result = command.regex.exec(transcript);
+						if (result) {
+							command.callback(result.slice(1));
+							break;
+						}
+					}
 					break;
 			}
 		} catch (err) {
