@@ -2,6 +2,7 @@
 	window.wvcat = this;
 
 	this.controls = [];
+	this.customCommands = [];
 	this.isListening = false;
 	this.currentControl = null;
 	this.currentControlIndex = 0;
@@ -19,6 +20,11 @@
 	};
 
 	this.execute = command => executeCommand(command);
+
+	this.addCustomCommand = ({ regexString, onMatch }) => {
+		const regex = new RegExp(regexString);
+		this.customCommands.push({ regex, onMatch });
+	};
 
 	function highlightFirstControllableElement() {
 		this.currentControl = findControlByUUID(controls[0].uuid);
@@ -65,11 +71,13 @@
 
 	function startSpeechRecognizer() {
 		setText('Listening...');
+
 		this.recognizer = new webkitSpeechRecognition();
 		recognizer.lang = this.options.lang;
 		recognizer.start();
 		recognizer.onresult = generateTranscript;
 		recognizer.onend = () => recognizer.start();
+
 		this.isListening = true;
 	}
 
@@ -90,8 +98,7 @@
 	}
 
 	function executeCommand(transcript) {
-		transcript = transcript.toLowerCase();
-		const words = transcript.split(' ');
+		const words = transcript.toLowerCase().split(' ');
 
 		try {
 			switch (words[0]) {
@@ -119,12 +126,16 @@
 					executeClickIntent();
 					break;
 
-				case 'goto':
+				case 'open':
 					executeNavigateToLinkIntent(words);
 					break;
 
 				default:
-					throw new Error('Invalid command.');
+					const command = this.customCommands.find(e =>
+						e.regex.match(transcript)
+					);
+					if (command) this.onMatch(generateParams(command, transcript));
+					break;
 			}
 		} catch (err) {
 			setText(err.message);
