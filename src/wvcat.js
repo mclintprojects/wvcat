@@ -13,9 +13,9 @@
 		this.options = options || { lang: 'en-US' };
 
 		findControllableElementsInDocument();
-		highlightFirstControllableElement();
 
-		if ('SpeechRecognition' in window) {
+		if ('SpeechRecognition' in window && this.controls.length > 0) {
+			highlightFirstControllableElement();
 			attachRecognitionContainerToDocument();
 			startSpeechRecognizer();
 		} else console.error('This browser does not support voice control.');
@@ -72,6 +72,7 @@
 
 		const style = document.createElement('style');
 		style.innerHTML = `.wvcat-container {
+								z-index: 99999;
 								background: white;
 								border: 2px solid lightblue;
 								border-radius: 5px;
@@ -85,7 +86,7 @@
 							}
 
 							.wvcat-highlight {
-								border: 2px solid lightblue;
+								border: 2px solid lightblue !important;
 							}`;
 
 		document.head.appendChild(style);

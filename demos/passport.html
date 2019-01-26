@@ -76,7 +76,8 @@
 								<div class="form-group margin-top-30 ">
 									<input
 										type="text"
-										class="form-control"
+										class="form-control wvcat-element"
+										data-wvcat-id="full-name"
 										placeholder="Enter Your Full Name"
 										name="username"
 										value=""
@@ -85,31 +86,17 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-9">
-								<div
-									id="previewBox"
-									style="display: none; margin-bottom: 10px;"
-								>
-									<label class="control-label">
-										Phone Number to save <em class="text-info"></em>
-									</label>
-								</div>
+							<div class="col-md-12">
 								<div class="form-group">
 									<input
 										type="phone"
-										class="form-control bfh-phone"
+										class="form-control bfh-phone wvcat-element"
+										data-wvcat-id="phone-number"
 										name="phone"
 										id="phone"
-										placeholder="541234567"
+										placeholder="Phone number"
 										value=""
 										maxlength="12"
-										style="margin-left: 80px;"
-									/>
-									<input
-										type="hidden"
-										id="phone-country"
-										name="phone-country"
-										value="233"
 									/>
 								</div>
 							</div>
@@ -120,7 +107,8 @@
 								<div class="form-group">
 									<input
 										type="email"
-										class="form-control"
+										class="form-control wvcat-element"
+										data-wvcat-id="email-address"
 										placeholder="Enter your Email Address"
 										name="email"
 										value=""
@@ -134,7 +122,8 @@
 								<div class="form-group">
 									<input
 										type="password"
-										class="form-control"
+										class="form-control wvcat-element"
+										data-wvcat-id="password"
 										placeholder="Enter a Password for your account"
 										name="password"
 									/>
@@ -147,7 +136,8 @@
 								<div class="form-group">
 									<input
 										type="password"
-										class="form-control"
+										class="form-control wvcat-element"
+										data-wvcat-id="confirm-password"
 										placeholder="Confirm Password"
 										name="password_confirmation"
 									/>
@@ -158,7 +148,11 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group no-border margin-top-30">
-									<button type="submit" class="btn btn-success btn-block">
+									<button
+										type="submit"
+										class="btn btn-success btn-block wvcat-element"
+										data-wvcat-id="sign-up"
+									>
 										Sign up
 									</button>
 								</div>
@@ -167,7 +161,9 @@
 						<div class="row">
 							<div class="col-md-12">
 								<p class="text-center">
-									<a href="https://passport.mfa.gov.gh/login"
+									<a
+										href="https://passport.mfa.gov.gh/login"
+										class="wvcat-element"
 										>Already have an Account</a
 									>
 								</p>
