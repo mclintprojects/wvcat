@@ -49,6 +49,9 @@
 	}
 
 	function setCurrentControl() {
+		if (this.currentControl)
+			this.currentControl.classList.remove('wvcat-highlight');
+
 		this.currentControl = findControlByUUID(
 			controls[this.currentControlIndex].uuid
 		);
@@ -190,12 +193,16 @@
 
 	function executeSelectControlIntent(words) {
 		const controlName = words.substring(1);
-		const control = this.findControlById();
+		const controlIndex = this.controls.findIndex(
+			c => c.identifier == controlName
+		);
+		if (controlIndex != -1) {
+			this.currentControlIndex = controlIndex;
+			setCurrentControl();
+		}
 	}
 
 	function executePreviousElementIntent() {
-		this.currentControl.classList.remove('wvcat-highlight');
-
 		--this.currentControlIndex;
 		if (this.currentControlIndex < 0)
 			this.currentControlIndex = controls.length - 1;
@@ -204,8 +211,6 @@
 	}
 
 	function executeNextElementIntent() {
-		this.currentControl.classList.remove('wvcat-highlight');
-
 		++this.currentControlIndex;
 		if (this.currentControlIndex >= this.controls.length)
 			this.currentControlIndex = 0;
