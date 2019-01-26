@@ -213,7 +213,7 @@
 	}
 
 	function executeNavigateToLinkIntent(words) {
-		if (hasValidSemantics('link')) {
+		if (hasValidSemantics('link', words)) {
 			if (words.length == 1) {
 				this.currentControl.click();
 			} else {
