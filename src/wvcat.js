@@ -166,6 +166,10 @@
 					executeNavigateToLinkIntent(words);
 					break;
 
+				case 'select':
+					executeSelectControlIntent(words);
+					break;
+
 				default:
 					for (let i = 0; i < this.customCommands.length; i++) {
 						const command = this.customCommands[i];
@@ -183,6 +187,11 @@
 	}
 
 	// ------- Intent executors
+
+	function executeSelectControlIntent(words) {
+		const controlName = words.substring(1);
+		const control = this.findControlById();
+	}
 
 	function executePreviousElementIntent() {
 		this.currentControl.classList.remove('wvcat-highlight');
@@ -204,17 +213,13 @@
 	}
 
 	function executeNavigateToLinkIntent(words) {
-		if (hasValidSemantics('link', words)) {
-			if (!words.includes('in')) {
-				let controlName = words.substring(1);
-				const control = findControlById(controlName);
-				if (control) control.click();
+		if (hasValidSemantics('link')) {
+			if (words.length == 1) {
+				this.currentControl.click();
 			} else {
-				let indexOfIn = words.lastIndexOf('in');
-				let controlName = words.substring(1, indexOfIn - 1);
-				let target = words.substring(indexOfIn + 1);
+				let target = words.substring(2);
+				const control = this.currentControl;
 
-				const control = findControlById(controlName);
 				if (
 					control &&
 					control.localName == 'a' &&
@@ -257,7 +262,7 @@
 	function hasValidSemantics(type, words) {
 		switch (type) {
 			case 'link':
-				return words.length >= 2;
+				return words.length == 1 || (words.length > 2 && words[1] == 'in');
 		}
 	}
 
