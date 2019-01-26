@@ -14,7 +14,7 @@
 
 		findControllableElementsInDocument();
 
-		if ('SpeechRecognition' in window && this.controls.length > 0) {
+		if (window.SpeechRecognition && this.controls.length > 0) {
 			highlightFirstControllableElement();
 			attachRecognitionContainerToDocument();
 			startSpeechRecognizer();
@@ -140,10 +140,10 @@
 	}
 
 	function executeCommand(transcript) {
-		const words = transcript.toLowerCase().split(' ');
+		const words = transcript.split(' ');
 
 		try {
-			switch (words[0]) {
+			switch (words[0].toLowerCase()) {
 				case 'next':
 					executeNextElementIntent();
 					break;
