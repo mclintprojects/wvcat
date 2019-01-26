@@ -1,5 +1,7 @@
 (function(window) {
 	window.wvcat = this;
+	window.SpeechRecognition =
+		window.webkitSpeechRecognition || window.SpeechRecognition;
 
 	this.controls = [];
 	this.customCommands = [];
@@ -13,7 +15,7 @@
 		findControllableElementsInDocument();
 		highlightFirstControllableElement();
 
-		if ('webkitSpeechRecognition' in window) {
+		if ('SpeechRecognition' in window) {
 			attachRecognitionContainerToDocument();
 			startSpeechRecognizer();
 		} else console.error('This browser does not support voice control.');
@@ -111,7 +113,7 @@
 	function startSpeechRecognizer() {
 		setText('Listening...');
 
-		this.recognizer = new webkitSpeechRecognition();
+		this.recognizer = new SpeechRecognition();
 		recognizer.lang = this.options.lang;
 		recognizer.start();
 		recognizer.onresult = generateTranscript;
