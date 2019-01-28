@@ -128,6 +128,7 @@
 	}
 
 	function generateTranscript({ results }) {
+		setText(`Generating transcript...`);
 		let transcript = '';
 		for (let i = 0; i < results.length; i++) {
 			const result = results[i];
@@ -135,8 +136,6 @@
 		}
 
 		executeCommand(transcript);
-		setText(`Executed command successfully.`);
-		transcript = '';
 	}
 
 	function executeCommand(transcript) {
