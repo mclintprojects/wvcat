@@ -116,6 +116,7 @@
 
 		this.recognizer = new SpeechRecognition();
 		recognizer.lang = this.options.lang;
+		recognizer.onstart = () => setText('Listening...');
 		recognizer.start();
 		recognizer.onresult = generateTranscript;
 		recognizer.onend = () => recognizer.start();
@@ -189,7 +190,7 @@
 			setText(err.message);
 		}
 
-		setText(`Executed command "${transcript}". Listening...`);
+		console.log(`Executed command "${transcript}".`);
 	}
 
 	// ------- Intent executors
