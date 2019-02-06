@@ -147,21 +147,21 @@
 
 	function addPunctuations(transcript) {
 		return transcript
-			.replace('at sign', '@')
-			.replace('and sign', '&')
-			.replace('question mark', '?')
-			.replace('comma', ',')
-			.replace('new line', '\r\n')
-			.replace('equal sign', '=')
-			.replace('hyphen', '-')
-			.replace('underscore', '_')
-			.replace('plus sign', '+')
-			.replace('forward slash', '/')
-			.replace('single quote', "'")
-			.replace('percent sign', '%')
-			.replace('left paranthesis', '(')
-			.replace('right paranthesis', ')')
-			.replace('quote sign', '"');
+			.replace(' at sign ', '@')
+			.replace(' and sign ', '&')
+			.replace(' question mark ', '?')
+			.replace(' comma ', ',')
+			.replace(' new line ', '\r\n')
+			.replace(' equal sign ', '=')
+			.replace(' hyphen ', '-')
+			.replace(' underscore ', '_')
+			.replace(' plus sign ', '+')
+			.replace(' forward slash ', '/')
+			.replace(' single quote ', "'")
+			.replace(' percent sign ', '%')
+			.replace(' left paranthesis ', '(')
+			.replace(' right paranthesis ', ')')
+			.replace(' quote sign ', '"');
 	}
 
 	function executeCommand(transcript) {
