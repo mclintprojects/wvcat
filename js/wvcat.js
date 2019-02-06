@@ -121,7 +121,11 @@
 		recognizer.onstart = () => {
 			this.indicatorText.innerText = 'Listening...';
 			this.card.style.borderColor = 'lawngreen';
-			setTimeout(() => (this.card.style.borderColor = 'lightblue'), 1500);
+
+			setTimeout(() => {
+				this.card.style.borderColor = 'lightblue';
+				this.indicatorText.innerText = '';
+			}, 1500);
 		};
 		recognizer.start();
 		recognizer.onresult = generateTranscript;
