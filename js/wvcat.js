@@ -189,6 +189,8 @@
 		} catch (err) {
 			setText(err.message);
 		}
+
+		setText('Listening...');
 	}
 
 	// ------- Intent executors
