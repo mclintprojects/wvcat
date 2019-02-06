@@ -62,9 +62,9 @@
 	}
 
 	function attachRecognitionContainerToDocument() {
-		const card = document.createElement('div');
-		card.setAttribute('role', 'alert');
-		card.classList.add('wvcat-container');
+		this.card = document.createElement('div');
+		this.card.setAttribute('role', 'alert');
+		this.card.classList.add('wvcat-container');
 
 		this.recognitionText = document.createElement('p');
 		this.recognitionText.appendChild(document.createTextNode(''));
@@ -118,7 +118,11 @@
 	function startSpeechRecognizer() {
 		this.recognizer = new SpeechRecognition();
 		recognizer.lang = this.options.lang;
-		recognizer.onstart = () => (this.indicatorText.innerText = 'Listening...');
+		recognizer.onstart = () => {
+			this.indicatorText.innerText = 'Listening...';
+			this.card.style.borderColor = 'lawngreen';
+			setTimeout(() => (this.card.style.borderColor = 'lightblue'), 400);
+		};
 		recognizer.start();
 		recognizer.onresult = generateTranscript;
 		recognizer.onend = () => recognizer.start();
