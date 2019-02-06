@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>WVCAT</title>
+		<style>
+			:root {
+				font-size: 62.5%;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				height: 100vh;
+				background: #a29c9b;
+				font-family: sans-serif;
+			}
+
+			body,
+			.demo,
+			.demos {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			h1 {
+				text-align: center;
+				margin-bottom: 2.4rem;
+			}
+
+			.demo {
+				width: 10rem;
+				height: 10rem;
+				background: #56494e;
+				border-radius: 0 2rem;
+			}
+
+			.demo:hover {
+				box-shadow: 0px 4px 8px 2px rgb(143, 143, 143);
+			}
+
+			.demo:last-child {
+				margin-left: 1.6rem;
+			}
+
+			.demo > a {
+				color: rgba(255, 255, 255, 0.8);
+				text-decoration: none;
+				font-size: 1.6rem;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<h1>Demos</h1>
+			<section class="demos">
+				<div class="demo"><a href="/demos/index.html">Login</a></div>
+				<div class="demo"><a href="/demos/passport.html">Passport</a></div>
+			</section>
+		</div>
+	</body>
+</html>
