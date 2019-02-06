@@ -134,7 +134,6 @@
 			if (result.isFinal) transcript += result[0].transcript;
 		}
 
-		setText(`Executing command "${transcript}"`);
 		executeCommand(transcript);
 	}
 
@@ -190,7 +189,7 @@
 			setText(err.message);
 		}
 
-		setText('Listening...');
+		setText(`Executed command "${transcript}". Listening...`);
 	}
 
 	// ------- Intent executors
