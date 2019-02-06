@@ -70,6 +70,10 @@
 		this.recognitionText.appendChild(document.createTextNode(''));
 		card.appendChild(this.recognitionText);
 
+		this.indicatorText = document.createElement('p');
+		this.indicatorText.appendChild(document.createTextNode(''));
+		card.appendChild(this.indicatorText);
+
 		const style = document.createElement('style');
 		style.innerHTML = `.wvcat-container {
 								z-index: 99999;
@@ -112,11 +116,9 @@
 	}
 
 	function startSpeechRecognizer() {
-		setText('Listening...');
-
 		this.recognizer = new SpeechRecognition();
 		recognizer.lang = this.options.lang;
-		recognizer.onstart = () => setText('Listening...');
+		recognizer.onstart = () => (this.indicatorText.innerText = 'Listening...');
 		recognizer.start();
 		recognizer.onresult = generateTranscript;
 		recognizer.onend = () => recognizer.start();
@@ -190,7 +192,7 @@
 			setText(err.message);
 		}
 
-		console.log(`Executed command "${transcript}".`);
+		setText(`Executed command "${transcript}".`);
 	}
 
 	// ------- Intent executors
