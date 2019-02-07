@@ -148,22 +148,22 @@
 
 	function addPunctuations(transcript) {
 		return transcript
-			.replace(/\s(at sign)\s*/g, '@')
-			.replace(/\s(and sign)\s*/g, '&')
-			.replace(/\s(question mark)\s*/g, '?')
-			.replace(/\s(comma)\s*/g, ',')
-			.replace(/\s(new line)\s*/g, '\r\n')
-			.replace(/\s(equal sign)\s*/g, '=')
-			.replace(/\s(hyphen)\s*/g, '-')
-			.replace(/\s(underscore)\s*/g, '_')
-			.replace(/\s(plus sign)\s*/g, '+')
-			.replace(/\s(forward slash)\s*/g, '/')
-			.replace(/\s(back slash)\s*/g, '\\')
-			.replace(/\s(single quote)\s*/g, "'")
-			.replace(/\s(percent sign)\s*/g, '%')
-			.replace(/\s(left parenthesis)\s*/g, '(')
-			.replace(/\s(right parenthesis)\s*/g, ')')
-			.replace(/\s(quote sign)\s*/g, '"');
+			.replace('at sign', '@')
+			.replace('and sign', '&')
+			.replace('question mark', '?')
+			.replace('comma', ',')
+			.replace('new line', '\r\n')
+			.replace('equal sign', '=')
+			.replace('hyphen', '-')
+			.replace('underscore', '_')
+			.replace('plus sign', '+')
+			.replace('forward slash', '/')
+			.replace('back slash', '\\')
+			.replace('single quote', "'")
+			.replace('percent sign', '%')
+			.replace('left parenthesis', '(')
+			.replace('right parenthesis', ')')
+			.replace('quote sign', '"');
 	}
 
 	function executeCommand(transcript) {
