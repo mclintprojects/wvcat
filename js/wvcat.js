@@ -54,11 +54,14 @@
 		if (this.currentControl)
 			this.currentControl.classList.remove('wvcat-highlight');
 
-		this.currentControl = findControlByUUID(
-			controls[this.currentControlIndex].uuid
-		);
+		const control = controls[this.currentControlIndex];
+		this.currentControl = findControlByUUID(control.uuid);
 		this.currentControl.classList.add('wvcat-highlight');
 		this.currentControl.focus();
+
+		if (control.identifier) {
+			setText(`Selected element "${control.identifier}".`);
+		}
 	}
 
 	function attachRecognitionContainerToDocument() {
@@ -132,7 +135,7 @@
 
 	function setText(text) {
 		this.recognitionText.innerText = text;
-		setTimeout(() => (this.recognitionText.innerText = ''), 1000);
+		setTimeout(() => (this.recognitionText.innerText = ''), 2000);
 	}
 
 	function generateTranscript({ results }) {
