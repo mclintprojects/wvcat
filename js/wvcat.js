@@ -10,7 +10,7 @@
 	this.currentControlIndex = 0;
 
 	this.initialize = function(options) {
-		this.options = options || { lang: 'en-US' };
+		this.options = options || { lang: 'en-ZA' };
 
 		findControllableElementsInDocument();
 
