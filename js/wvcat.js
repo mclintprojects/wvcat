@@ -38,15 +38,15 @@
 	// The command matching code is a modified version of Aanyang.js by Tel Atel, under the MIT license.
 	let namedParam = /(\(\?)?:\w+/g;
 	let splatParam = /\*\w+/g;
-	let escapeRegExp = /[-{}[\]+?.,\\^$|#]/g;
+	let escapeRegExp = /[-{}[\]+?.,\\$|#]/g;
 	function commandToRegExp(command) {
 		command = command
 			.replace(escapeRegExp, '\\$&')
 			.replace(namedParam, function(match, optional) {
-				return optional ? match : '([^\\s]+)';
+				return optional ? match : '([\\s]+)';
 			})
 			.replace(splatParam, '(.*?)');
-		return new RegExp('^' + command + '$', 'i');
+		return new RegExp('' + command + '$', 'i');
 	}
 
 	function highlightFirstControllableElement() {
@@ -143,31 +143,31 @@
 			if (result.isFinal) transcript += result[0].transcript;
 		}
 
-		executeCommand(addPunctuations(transcript));
+		executeCommand(transcript);
 	}
 
 	function addPunctuations(transcript) {
 		return transcript
-			.replace(/^\s(at sign)\s*/g, '@')
-			.replace(/^\s(and sign)\s*/g, '&')
-			.replace(/^\s(question mark)\s*/g, '?')
-			.replace(/^\s(comma)\s*/g, ',')
-			.replace(/^\s(new line)\s*/g, '\r\n')
-			.replace(/^\s(equal sign)\s*/g, '=')
-			.replace(/^\s(hyphen)\s*/g, '-')
-			.replace(/^\s(underscore)\s*/g, '_')
-			.replace(/^\s(plus sign)\s*/g, '+')
-			.replace(/^\s(forward slash)\s*/g, '/')
-			.replace(/^\s(back slash)\s*/g, '\\')
-			.replace(/^\s(single quote)\s*/g, "'")
-			.replace(/^\s(percent sign)\s*/g, '%')
-			.replace(/^\s(left parenthesis)\s*/g, '(')
-			.replace(/^\s(right parenthesis)\s*/g, ')')
-			.replace(/^\s(quote sign)\s*/g, '"');
+			.replace(/\s(at sign)\s*/g, '@')
+			.replace(/\s(and sign)\s*/g, '&')
+			.replace(/\s(question mark)\s*/g, '?')
+			.replace(/\s(comma)\s*/g, ',')
+			.replace(/\s(new line)\s*/g, '\r\n')
+			.replace(/\s(equal sign)\s*/g, '=')
+			.replace(/\s(hyphen)\s*/g, '-')
+			.replace(/\s(underscore)\s*/g, '_')
+			.replace(/\s(plus sign)\s*/g, '+')
+			.replace(/\s(forward slash)\s*/g, '/')
+			.replace(/\s(back slash)\s*/g, '\\')
+			.replace(/\s(single quote)\s*/g, "'")
+			.replace(/\s(percent sign)\s*/g, '%')
+			.replace(/\s(left parenthesis)\s*/g, '(')
+			.replace(/\s(right parenthesis)\s*/g, ')')
+			.replace(/\s(quote sign)\s*/g, '"');
 	}
 
 	function executeCommand(transcript) {
-		const words = transcript.split(' ');
+		const words = addPunctuations(transcript).split(' ');
 
 		try {
 			switch (words[0].toLowerCase()) {
