@@ -57,14 +57,9 @@
 	function setCurrentControl() {
 		if (currentControl) currentControl.classList.remove('wvcat-highlight');
 
-		const control = controls[currentControlIndex];
-		currentControl = findControlByUUID(control.uuid);
+		currentControl = findControlByUUID(controls[currentControlIndex].uuid);
 		currentControl.classList.add('wvcat-highlight');
 		currentControl.focus();
-
-		if (control.identifier) {
-			setText(`Selected element "${control.identifier}".`);
-		}
 	}
 
 	function attachRecognitionContainerToDocument() {
@@ -328,7 +323,7 @@
 })();
 
 Array.prototype.substring = function(start, end, join = '') {
-	end = end || length - 1;
+	end = end || this.length - 1;
 	let word = '';
 	for (start; start <= end; start++) {
 		if (start != end) word += `${this[start]} ${join}`;
