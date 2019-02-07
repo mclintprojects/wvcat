@@ -1,20 +1,24 @@
-(function(window) {
+(function() {
 	window.wvcat = this;
 	window.SpeechRecognition =
 		window.webkitSpeechRecognition || window.SpeechRecognition;
 
-	this.controls = [];
-	this.customCommands = [];
-	this.isListening = false;
-	this.currentControl = null;
-	this.currentControlIndex = 0;
+	var controls = [],
+		customCommands = [],
+		isListening = false,
+		currentControl = null,
+		currentControlIndex = 0,
+		_options = {},
+		card = null,
+		indicatorText = null,
+		recognitionText = null;
 
 	this.initialize = function(options) {
-		this.options = options || { lang: 'en-GH' };
+		_options = options || { lang: 'en-GH' };
 
 		findControllableElementsInDocument();
 
-		if (window.SpeechRecognition && this.controls.length > 0) {
+		if (window.SpeechRecognition && controls.length > 0) {
 			highlightFirstControllableElement();
 			attachRecognitionContainerToDocument();
 			startSpeechRecognizer();
@@ -25,7 +29,7 @@
 
 	this.addCustomCommand = (command, callback) => {
 		const regex = commandToRegExp(command);
-		this.customCommands.push({
+		customCommands.push({
 			regex,
 			callback
 		});
@@ -46,18 +50,17 @@
 	}
 
 	function highlightFirstControllableElement() {
-		this.currentControl = findControlByUUID(controls[0].uuid);
-		this.currentControl.classList.add('wvcat-highlight');
+		currentControl = findControlByUUID(controls[0].uuid);
+		currentControl.classList.add('wvcat-highlight');
 	}
 
 	function setCurrentControl() {
-		if (this.currentControl)
-			this.currentControl.classList.remove('wvcat-highlight');
+		if (currentControl) currentControl.classList.remove('wvcat-highlight');
 
-		const control = controls[this.currentControlIndex];
-		this.currentControl = findControlByUUID(control.uuid);
-		this.currentControl.classList.add('wvcat-highlight');
-		this.currentControl.focus();
+		const control = controls[currentControlIndex];
+		currentControl = findControlByUUID(control.uuid);
+		currentControl.classList.add('wvcat-highlight');
+		currentControl.focus();
 
 		if (control.identifier) {
 			setText(`Selected element "${control.identifier}".`);
@@ -65,17 +68,17 @@
 	}
 
 	function attachRecognitionContainerToDocument() {
-		this.card = document.createElement('div');
-		this.card.setAttribute('role', 'alert');
-		this.card.classList.add('wvcat-container');
+		card = document.createElement('div');
+		card.setAttribute('role', 'alert');
+		card.classList.add('wvcat-container');
 
-		this.recognitionText = document.createElement('p');
-		this.recognitionText.appendChild(document.createTextNode(''));
-		card.appendChild(this.recognitionText);
+		recognitionText = document.createElement('p');
+		recognitionText.appendChild(document.createTextNode(''));
+		card.appendChild(recognitionText);
 
-		this.indicatorText = document.createElement('p');
-		this.indicatorText.appendChild(document.createTextNode(''));
-		card.appendChild(this.indicatorText);
+		indicatorText = document.createElement('p');
+		indicatorText.appendChild(document.createTextNode(''));
+		card.appendChild(indicatorText);
 
 		const style = document.createElement('style');
 		style.innerHTML = `.wvcat-container {
@@ -119,23 +122,23 @@
 	}
 
 	function startSpeechRecognizer() {
-		this.recognizer = new SpeechRecognition();
-		recognizer.lang = this.options.lang;
+		recognizer = new SpeechRecognition();
+		recognizer.lang = _options.lang;
 		recognizer.onstart = () => {
-			this.indicatorText.innerText = 'Listening...';
-			this.card.style.borderColor = 'lawngreen';
-			setTimeout(() => (this.card.style.borderColor = 'lightblue'), 1000);
+			indicatorText.innerText = 'Listening...';
+			card.style.borderColor = 'lawngreen';
+			setTimeout(() => (card.style.borderColor = 'lightblue'), 1000);
 		};
 		recognizer.start();
 		recognizer.onresult = generateTranscript;
 		recognizer.onend = () => recognizer.start();
 
-		this.isListening = true;
+		isListening = true;
 	}
 
 	function setText(text) {
-		this.recognitionText.innerText = text;
-		setTimeout(() => (this.recognitionText.innerText = ''), 2000);
+		recognitionText.innerText = text;
+		setTimeout(() => (recognitionText.innerText = ''), 2000);
 	}
 
 	function generateTranscript({ results }) {
@@ -206,8 +209,8 @@
 					break;
 
 				default:
-					for (let i = 0; i < this.customCommands.length; i++) {
-						const command = this.customCommands[i];
+					for (let i = 0; i < customCommands.length; i++) {
+						const command = customCommands[i];
 						const result = command.regex.exec(transcript);
 						if (result) {
 							command.callback.apply(this, result.slice(1));
@@ -227,37 +230,33 @@
 
 	function executeSelectControlIntent(words) {
 		const controlName = words.substring(1);
-		const controlIndex = this.controls.findIndex(
-			c => c.identifier == controlName
-		);
+		const controlIndex = controls.findIndex(c => c.identifier == controlName);
 		if (controlIndex != -1) {
-			this.currentControlIndex = controlIndex;
+			currentControlIndex = controlIndex;
 			setCurrentControl();
 		}
 	}
 
 	function executePreviousElementIntent() {
-		--this.currentControlIndex;
-		if (this.currentControlIndex < 0)
-			this.currentControlIndex = controls.length - 1;
+		--currentControlIndex;
+		if (currentControlIndex < 0) currentControlIndex = controls.length - 1;
 
 		setCurrentControl();
 	}
 
 	function executeNextElementIntent() {
-		++this.currentControlIndex;
-		if (this.currentControlIndex >= this.controls.length)
-			this.currentControlIndex = 0;
+		++currentControlIndex;
+		if (currentControlIndex >= controls.length) currentControlIndex = 0;
 		setCurrentControl();
 	}
 
 	function executeNavigateToLinkIntent(words) {
 		if (hasValidSemantics('link', words)) {
 			if (words.length == 1) {
-				this.currentControl.click();
+				currentControl.click();
 			} else {
 				let target = words.substring(2);
-				const control = this.currentControl;
+				const control = currentControl;
 
 				if (
 					control &&
@@ -275,25 +274,25 @@
 	function executeTypingIntent(action, words) {
 		let whatToType = words.substring(1);
 
-		if (this.currentControl.localName == 'input') {
+		if (currentControl.localName == 'input') {
 			switch (action) {
 				case 'type':
-					this.currentControl.value = whatToType;
+					currentControl.value = whatToType;
 					break;
 
 				case 'append':
-					this.currentControl.value += ` ${whatToType}`;
+					currentControl.value += ` ${whatToType}`;
 					break;
 
 				case 'clear':
-					this.currentControl.value = '';
+					currentControl.value = '';
 					break;
 			}
 		} else throw Error('Currently selected element is not an input element.');
 	}
 
 	function executeClickIntent() {
-		this.currentControl.click();
+		currentControl.click();
 	}
 
 	// ------- Intent executors
@@ -326,10 +325,10 @@
 			})
 		);
 	}
-})(window);
+})();
 
 Array.prototype.substring = function(start, end, join = '') {
-	end = end || this.length - 1;
+	end = end || length - 1;
 	let word = '';
 	for (start; start <= end; start++) {
 		if (start != end) word += `${this[start]} ${join}`;
