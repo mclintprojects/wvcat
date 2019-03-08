@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<title>WVCAT</title>
+		<script src="./js/wvcat.js"></script>
 		<style>
 			:root {
 				font-size: 62.5%;
@@ -14,55 +15,36 @@
 				margin: 0;
 				padding: 0;
 			}
-
-			body {
-				height: 100vh;
-				background: #a29c9b;
-				font-family: sans-serif;
-			}
-
-			body,
-			.demo,
-			.demos {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-			}
-
-			h1 {
-				text-align: center;
-				margin-bottom: 2.4rem;
-			}
-
-			.demo {
-				width: 10rem;
-				height: 10rem;
-				background: #56494e;
-				border-radius: 0 2rem;
-			}
-
-			.demo:hover {
-				box-shadow: 0px 4px 8px 2px rgb(143, 143, 143);
-			}
-
-			.demo:last-child {
-				margin-left: 1.6rem;
-			}
-
-			.demo > a {
-				color: rgba(255, 255, 255, 0.8);
-				text-decoration: none;
-				font-size: 1.6rem;
-			}
 		</style>
 	</head>
 	<body>
-		<div>
-			<h1>Demos</h1>
-			<section class="demos">
-				<div class="demo"><a href="./demos/login.html">Login</a></div>
-				<div class="demo"><a href="./demos/passport.html">Passport</a></div>
+		<main>
+			<section class="branding"></section>
+			<section class="login-form">
+				<form>
+					<input
+						type="text"
+						class="wvcat-element"
+						data-wvcat-id="email"
+						placeholder="GTUC email address"
+					/>
+					<input
+						type="password"
+						class="wvcat-element"
+						data-wvcat-id="password"
+						placeholder="Password"
+					/>
+					<button type="btn">Login</button>
+
+					<p>
+						Forgot your password? Click <a href="/reset.html">here</a> to do a
+						password reset.
+					</p>
+				</form>
 			</section>
-		</div>
+		</main>
+		<script>
+			wvcat.initialize();
+		</script>
 	</body>
 </html>

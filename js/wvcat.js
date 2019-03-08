@@ -4,8 +4,8 @@
 		window.webkitSpeechRecognition || window.SpeechRecognition;
 
 	var controls = [],
+		speechRecognizerRunning = false,
 		customCommands = [],
-		isListening = false,
 		currentControl = null,
 		currentControlIndex = 0,
 		_options = {},
@@ -21,7 +21,9 @@
 		if (window.SpeechRecognition && controls.length > 0) {
 			highlightFirstControllableElement();
 			attachRecognitionContainerToDocument();
-			startSpeechRecognizer();
+			attachHotkey();
+			attachContextAwareListener();
+			initializeSpeechRecognizer();
 		} else console.error('This browser does not support voice control.');
 	};
 
@@ -49,6 +51,32 @@
 		return new RegExp('' + command + '$', 'i');
 	}
 
+	function attachHotkey() {
+		document.addEventListener(
+			'keyup',
+			function(event) {
+				if (event.key == 'Control' && !speechRecognizerRunning)
+					startSpeechRecognizer();
+			},
+			true
+		);
+	}
+
+	function attachContextAwareListener() {
+		document.addEventListener(
+			'focus',
+			function(event) {
+				if (event.target.classList.contains('wvcat-element')) {
+					indicatorText.innerText = `Currently selected element: ${event.target.dataset.wvcatId.replace(
+						'-',
+						' '
+					)}`;
+				}
+			},
+			true
+		);
+	}
+
 	function highlightFirstControllableElement() {
 		currentControl = findControlByUUID(controls[0].uuid);
 		currentControl.classList.add('wvcat-highlight');
@@ -65,6 +93,7 @@
 	function attachRecognitionContainerToDocument() {
 		card = document.createElement('div');
 		card.setAttribute('role', 'alert');
+		card.setAttribute('aria-live', 'assertive');
 		card.classList.add('wvcat-container');
 
 		recognitionText = document.createElement('p');
@@ -116,19 +145,22 @@
 		}
 	}
 
-	function startSpeechRecognizer() {
+	function initializeSpeechRecognizer() {
 		recognizer = new SpeechRecognition();
 		recognizer.lang = _options.lang;
 		recognizer.onstart = () => {
 			indicatorText.innerText = 'Listening...';
-			card.style.borderColor = 'lawngreen';
-			setTimeout(() => (card.style.borderColor = 'lightblue'), 1000);
+			speechRecognizerRunning = true;
 		};
-		recognizer.start();
 		recognizer.onresult = generateTranscript;
-		recognizer.onend = () => recognizer.start();
+		recognizer.onend = () => {
+			speechRecognizerRunning = false;
+			indicatorText.innerText = '';
+		};
+	}
 
-		isListening = true;
+	function startSpeechRecognizer() {
+		recognizer.start();
 	}
 
 	function setText(text) {
@@ -218,7 +250,7 @@
 			setText(err.message);
 		}
 
-		setText(`Executed command "${transcript}".`);
+		setText(`Executed command: "${transcript}".`);
 	}
 
 	// ------- Intent executors
