@@ -11,7 +11,16 @@
 		_options = {},
 		card = null,
 		indicatorText = null,
-		recognitionText = null;
+		recognitionText = null,
+		wvcatKeywords = [
+			'next',
+			'previous',
+			'clear',
+			'click',
+			'click',
+			'open',
+			'select'
+		];
 
 	this.initialize = function(options) {
 		_options = options || { lang: 'en-GH' };
@@ -27,15 +36,21 @@
 		} else console.error('This browser does not support voice control.');
 	};
 
+	// ---- PUBLIC FUNCTIONS ----
+
 	this.execute = command => executeCommand(command);
 
 	this.addCustomCommand = (command, callback) => {
+		command = command.toLowerCase();
 		const regex = commandToRegExp(command);
 		customCommands.push({
 			regex,
-			callback
+			callback,
+			command
 		});
 	};
+
+	// ---- END PUBLIC FUNCTIONS ----
 
 	// The command matching code is a modified version of Aanyang.js by Tel Atel, under the MIT license.
 	let namedParam = /(\(\?)?:\w+/g;
@@ -49,32 +64,6 @@
 			})
 			.replace(splatParam, '(.*?)');
 		return new RegExp('' + command + '$', 'i');
-	}
-
-	function attachHotkey() {
-		document.addEventListener(
-			'keyup',
-			function(event) {
-				if (event.key == 'Control' && !speechRecognizerRunning)
-					startSpeechRecognizer();
-			},
-			true
-		);
-	}
-
-	function attachContextAwareListener() {
-		document.addEventListener(
-			'focus',
-			function(event) {
-				if (event.target.classList.contains('wvcat-element')) {
-					indicatorText.innerText = `Currently selected element: ${event.target.dataset.wvcatId.replace(
-						'-',
-						' '
-					)}`;
-				}
-			},
-			true
-		);
 	}
 
 	function highlightFirstControllableElement() {
@@ -145,11 +134,37 @@
 		}
 	}
 
+	function attachHotkey() {
+		document.addEventListener(
+			'keyup',
+			function(event) {
+				if (event.key == 'Control' && !speechRecognizerRunning)
+					startSpeechRecognizer();
+			},
+			true
+		);
+	}
+
+	function attachContextAwareListener() {
+		document.addEventListener(
+			'focus',
+			function(event) {
+				if (event.target.classList.contains('wvcat-element')) {
+					indicatorText.innerText = `Currently selected element: ${event.target.dataset.wvcatId.replace(
+						'-',
+						' '
+					)}`;
+				}
+			},
+			true
+		);
+	}
+
 	function initializeSpeechRecognizer() {
 		recognizer = new SpeechRecognition();
 		recognizer.lang = _options.lang;
 		recognizer.onstart = () => {
-			indicatorText.innerText = 'Listening...';
+			indicatorText.innerText = 'Listening for your command...';
 			speechRecognizerRunning = true;
 		};
 		recognizer.onresult = generateTranscript;
@@ -178,28 +193,8 @@
 		executeCommand(transcript);
 	}
 
-	function addPunctuations(transcript) {
-		return transcript
-			.replace('at sign', '@')
-			.replace('and sign', '&')
-			.replace('question mark', '?')
-			.replace('comma', ',')
-			.replace('new line', '\r\n')
-			.replace('equal sign', '=')
-			.replace('hyphen', '-')
-			.replace('underscore', '_')
-			.replace('plus sign', '+')
-			.replace('forward slash', '/')
-			.replace('back slash', '\\')
-			.replace('single quote', "'")
-			.replace('percent sign', '%')
-			.replace('left parenthesis', '(')
-			.replace('right parenthesis', ')')
-			.replace('quote sign', '"');
-	}
-
 	function executeCommand(transcript) {
-		const words = addPunctuations(transcript).split(' ');
+		const words = transcript.split(' ');
 
 		try {
 			switch (words[0].toLowerCase()) {
@@ -209,14 +204,6 @@
 
 				case 'previous':
 					executePreviousElementIntent();
-					break;
-
-				case 'type':
-					executeTypingIntent('type', words);
-					break;
-
-				case 'append':
-					executeTypingIntent('append', words);
 					break;
 
 				case 'clear':
@@ -236,24 +223,118 @@
 					break;
 
 				default:
-					for (let i = 0; i < customCommands.length; i++) {
-						const command = customCommands[i];
-						const result = command.regex.exec(transcript);
-						if (result) {
-							command.callback.apply(this, result.slice(1));
-							break;
-						}
-					}
+					handleCustomCommand(words[0], words);
 					break;
 			}
 		} catch (err) {
 			setText(err.message);
 		}
-
-		setText(`Executed command: "${transcript}".`);
 	}
 
+	function handleCustomCommand(keyword, words) {
+		const nearestKeywordMatch = nearestMatch(keyword, wvcatKeywords);
+		if (nearestKeywordMatch)
+			executeCommand(`${nearestKeywordMatch} ${words.substring(1)}`);
+		else executeCustomCommand(words.substring(0));
+	}
+
+	function executeCustomCommand(transcript) {
+		for (let i = 0; i < customCommands.length; i++) {
+			const command = customCommands[i];
+			const result = command.regex.exec(transcript);
+			if (result) {
+				command.callback.apply(this, result.slice(1));
+				break;
+			} else {
+				const nearestCommandMatch = nearestMatch(
+					transcript,
+					customCommands.map(c => c.command)
+				);
+
+				if (nearestCommandMatch) {
+					executeCommand(nearestCommandMatch);
+					break;
+				} else throw new Error(`Could not execute '${transcript}'`);
+			}
+		}
+	}
+
+	function levenshtein(s1, s2) {
+		// based on original implementation by diogo gomes https://gist.github.com/graphnode/979790
+		if (s1 == s2) {
+			return 0;
+		}
+
+		const s1_len = s1.length;
+		const s2_len = s2.length;
+		if (s1_len === 0) {
+			return s2_len;
+		}
+		if (s2_len === 0) {
+			return s1_len;
+		}
+
+		let v0 = [s1_len + 1];
+		let v1 = [s1_len + 1];
+		let s1_idx = 0,
+			s2_idx = 0,
+			cost = 0;
+		for (s1_idx = 0; s1_idx < s1_len + 1; s1_idx++) {
+			v0[s1_idx] = s1_idx;
+		}
+		let char_s1 = '',
+			char_s2 = '';
+		for (s2_idx = 1; s2_idx <= s2_len; s2_idx++) {
+			v1[0] = s2_idx;
+			char_s2 = s2[s2_idx - 1];
+
+			for (s1_idx = 0; s1_idx < s1_len; s1_idx++) {
+				char_s1 = s1[s1_idx];
+				cost = char_s1 == char_s2 ? 0 : 1;
+				let m_min = v0[s1_idx + 1] + 1;
+				const b = v1[s1_idx] + 1;
+				const c = v0[s1_idx] + cost;
+				if (b < m_min) {
+					m_min = b;
+				}
+				if (c < m_min) {
+					m_min = c;
+				}
+				v1[s1_idx + 1] = m_min;
+			}
+			const v_tmp = v0;
+			v0 = v1;
+			v1 = v_tmp;
+		}
+		return v0[s1_len];
+	}
+
+	function nearestMatch(original, testWords) {
+		let results = testWords.map(w => ({
+			distance: levenshtein(original, w),
+			word: w
+		}));
+
+		let closeResults = [];
+		results = results.forEach(result => {
+			if (result.distance <= 3) closeResults.push(result);
+		});
+
+		if (closeResults.length > 0)
+			return closeResults.sort(
+				(result1, result2) => result1.distance > result2.distance
+			)[0].word;
+
+		return null;
+	}
+
+	console.log(nearestMatch('nest', ['knowledge', 'data']));
+
 	// ------- Intent executors
+
+	function setSuccessExecutionMessage() {
+		setText(`Executed command: successfully.`);
+	}
 
 	function executeSelectControlIntent(words) {
 		const controlName = words.substring(1);
@@ -261,6 +342,7 @@
 		if (controlIndex != -1) {
 			currentControlIndex = controlIndex;
 			setCurrentControl();
+			setSuccessExecutionMessage();
 		}
 	}
 
@@ -269,12 +351,14 @@
 		if (currentControlIndex < 0) currentControlIndex = controls.length - 1;
 
 		setCurrentControl();
+		setSuccessExecutionMessage();
 	}
 
 	function executeNextElementIntent() {
 		++currentControlIndex;
 		if (currentControlIndex >= controls.length) currentControlIndex = 0;
 		setCurrentControl();
+		setSuccessExecutionMessage();
 	}
 
 	function executeNavigateToLinkIntent(words) {
@@ -295,31 +379,14 @@
 						: window.open(control.href);
 				}
 			}
+
+			setSuccessExecutionMessage();
 		} else throw new Error('Invalid link navigation intent command.');
-	}
-
-	function executeTypingIntent(action, words) {
-		let whatToType = words.substring(1);
-
-		if (currentControl.localName == 'input') {
-			switch (action) {
-				case 'type':
-					currentControl.value = whatToType;
-					break;
-
-				case 'append':
-					currentControl.value += ` ${whatToType}`;
-					break;
-
-				case 'clear':
-					currentControl.value = '';
-					break;
-			}
-		} else throw Error('Currently selected element is not an input element.');
 	}
 
 	function executeClickIntent() {
 		currentControl.click();
+		setSuccessExecutionMessage();
 	}
 
 	// ------- Intent executors
@@ -329,12 +396,6 @@
 			case 'link':
 				return words.length == 1 || (words.length > 2 && words[1] == 'in');
 		}
-	}
-
-	function findControlById(identifier) {
-		const control = controls.find(c => c.identifier == identifier);
-		if (control) return document.getElementsByClassName(control.uuid)[0];
-		return null;
 	}
 
 	function findControlByUUID(uuid) {
