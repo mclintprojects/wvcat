@@ -9,11 +9,83 @@
 		<style>
 			:root {
 				font-size: 62.5%;
+				--primary-color: darkslateblue;
 			}
 
 			* {
 				margin: 0;
 				padding: 0;
+				box-sizing: border-box;
+				font-family: 'Helvetica', sans-serif;
+			}
+
+			main {
+				display: flex;
+				height: 100vh;
+			}
+
+			.branding {
+				width: 77%;
+				background: url('https://erp.gtuc.edu.gh/sip/images/login-cover.jpg');
+				background-repeat: no-repeat;
+			}
+
+			.login-form {
+				border-left: 0.5rem solid var(--primary-color);
+				padding: 3rem 6rem;
+			}
+
+			form {
+				padding-top: 1.6rem;
+				width: 100%;
+				margin: auto;
+			}
+
+			input {
+				display: block;
+				width: 100%;
+				padding: 1rem 1.6rem;
+				margin-bottom: 1.6rem;
+				border: 0.1rem solid #ccd0d4;
+				border-bottom: 0.3rem solid var(--primary-color);
+				border-radius: 0.3rem;
+			}
+
+			button {
+				width: 100%;
+				border: none;
+				background: #2a72b5;
+				padding: 1rem 1.2rem;
+				font-size: 1.6rem;
+				color: white;
+				border-radius: 0.3rem;
+				margin-bottom: 2.4rem;
+			}
+
+			button:hover {
+				cursor: pointer;
+			}
+
+			button + p {
+				font-size: 1.2rem;
+				color: rgba(0, 0, 0, 0.54);
+			}
+
+			hr {
+				margin-top: 6rem;
+				border: 0.2rem solid var(--primary-color);
+				margin-bottom: 2.4rem;
+			}
+
+			hr + span {
+				display: block;
+				margin: auto;
+				font-size: 1.2rem;
+				text-align: center;
+			}
+
+			a {
+				color: #23527c;
 			}
 		</style>
 	</head>
@@ -21,6 +93,10 @@
 		<main>
 			<section class="branding"></section>
 			<section class="login-form">
+				<img
+					src="https://erp.gtuc.edu.gh/sip/images/siploginlogo.png"
+					alt="gtuc sip login logo"
+				/>
 				<form>
 					<input
 						type="text"
@@ -34,12 +110,32 @@
 						data-wvcat-id="password"
 						placeholder="Password"
 					/>
-					<button type="btn">Login</button>
+					<button type="btn" class="wvcat-element" data-wvcat-id="login">
+						Login
+					</button>
 
 					<p>
-						Forgot your password? Click <a href="/reset.html">here</a> to do a
-						password reset.
+						Forgot your password? Click
+						<a
+							href="/reset.html"
+							class="wvcat-element"
+							data-wvcat-id="reset-password"
+							>here</a
+						>
+						to do a password reset.
 					</p>
+
+					<hr />
+
+					<span
+						>&copy;
+						<a
+							href="https://gtuc.edu.gh"
+							class="wvcat-element"
+							data-wvcat-id="gtuc-link"
+							>GTUC. All Right Reserved</a
+						></span
+					>
 				</form>
 			</section>
 		</main>

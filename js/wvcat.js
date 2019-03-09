@@ -69,6 +69,7 @@
 	function highlightFirstControllableElement() {
 		currentControl = findControlByUUID(controls[0].uuid);
 		currentControl.classList.add('wvcat-highlight');
+		currentControl.focus();
 	}
 
 	function setCurrentControl() {
@@ -180,7 +181,7 @@
 
 	function setText(text) {
 		recognitionText.innerText = text;
-		setTimeout(() => (recognitionText.innerText = ''), 2000);
+		//setTimeout(() => (recognitionText.innerText = ''), 2000);
 	}
 
 	function generateTranscript({ results }) {
@@ -254,7 +255,7 @@
 				if (nearestCommandMatch) {
 					executeCommand(nearestCommandMatch);
 					break;
-				} else throw new Error(`Could not execute '${transcript}'`);
+				} else throw new Error(`Could not execute '${transcript}'.`);
 			}
 		}
 	}
