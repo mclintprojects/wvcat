@@ -4,26 +4,10 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-		<title>WVCAT</title>
+		<title>SIP</title>
 		<script src="./js/wvcat.js"></script>
+		<link href="./css/sip.css" rel="stylesheet" />
 		<style>
-			:root {
-				font-size: 62.5%;
-				--primary-color: darkslateblue;
-			}
-
-			* {
-				margin: 0;
-				padding: 0;
-				box-sizing: border-box;
-				font-family: 'Helvetica', sans-serif;
-			}
-
-			main {
-				display: flex;
-				height: 100vh;
-			}
-
 			.branding {
 				width: 77%;
 				background: url('https://erp.gtuc.edu.gh/sip/images/login-cover.jpg');
@@ -33,6 +17,7 @@
 			.login-form {
 				border-left: 0.5rem solid var(--primary-color);
 				padding: 3rem 6rem;
+				width: 50rem;
 			}
 
 			form {
@@ -41,33 +26,7 @@
 				margin: auto;
 			}
 
-			input {
-				display: block;
-				width: 100%;
-				padding: 1rem 1.6rem;
-				margin-bottom: 1.6rem;
-				border: 0.1rem solid #ccd0d4;
-				border-bottom: 0.3rem solid var(--primary-color);
-				border-radius: 0.3rem;
-			}
-
-			button {
-				width: 100%;
-				border: none;
-				background: #2a72b5;
-				padding: 1rem 1.2rem;
-				font-size: 1.6rem;
-				color: white;
-				border-radius: 0.3rem;
-				margin-bottom: 2.4rem;
-			}
-
-			button:hover {
-				cursor: pointer;
-			}
-
 			button + p {
-				font-size: 1.2rem;
 				color: rgba(0, 0, 0, 0.54);
 			}
 
@@ -80,7 +39,6 @@
 			hr + span {
 				display: block;
 				margin: auto;
-				font-size: 1.2rem;
 				text-align: center;
 			}
 
@@ -101,16 +59,16 @@
 					<input
 						type="text"
 						class="wvcat-element"
-						data-wvcat-id="email"
+						data-wvcat-id="email-input"
 						placeholder="GTUC email address"
 					/>
 					<input
 						type="password"
 						class="wvcat-element"
-						data-wvcat-id="password"
+						data-wvcat-id="password-input"
 						placeholder="Password"
 					/>
-					<button type="btn" class="wvcat-element" data-wvcat-id="login">
+					<button type="btn" class="wvcat-element" data-wvcat-id="login-button">
 						Login
 					</button>
 
@@ -119,7 +77,7 @@
 						<a
 							href="/reset.html"
 							class="wvcat-element"
-							data-wvcat-id="reset-password"
+							data-wvcat-id="reset-link"
 							>here</a
 						>
 						to do a password reset.

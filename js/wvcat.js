@@ -28,10 +28,10 @@
 		findControllableElementsInDocument();
 
 		if (window.SpeechRecognition && controls.length > 0) {
-			highlightFirstControllableElement();
-			attachRecognitionContainerToDocument();
 			attachHotkey();
 			attachContextAwareListener();
+			attachRecognitionContainerToDocument();
+			highlightFirstControllableElement();
 			initializeSpeechRecognizer();
 		} else console.error('This browser does not support voice control.');
 	};
@@ -150,11 +150,18 @@
 		document.addEventListener(
 			'focus',
 			function(event) {
-				if (event.target.classList.contains('wvcat-element')) {
-					indicatorText.innerText = `Currently selected element: ${event.target.dataset.wvcatId.replace(
+				const control = event.target;
+				if (control.classList.contains('wvcat-element')) {
+					indicatorText.innerText = `Currently selected element: ${control.dataset.wvcatId.replace(
 						'-',
 						' '
-					)}`;
+					)}${
+						control.dataset.wvcatCommand
+							? ` You can say '${
+									control.dataset.wvcatCommand
+							  }' to perform this action.`
+							: ''
+					}`;
 				}
 			},
 			true
@@ -171,7 +178,6 @@
 		recognizer.onresult = generateTranscript;
 		recognizer.onend = () => {
 			speechRecognizerRunning = false;
-			indicatorText.innerText = '';
 		};
 	}
 
@@ -329,8 +335,6 @@
 		return null;
 	}
 
-	console.log(nearestMatch('nest', ['knowledge', 'data']));
-
 	// ------- Intent executors
 
 	function setSuccessExecutionMessage() {
@@ -365,11 +369,10 @@
 	function executeNavigateToLinkIntent(words) {
 		if (hasValidSemantics('link', words)) {
 			if (words.length == 1) {
-				currentControl.click();
+				if (currentControl.localName != 'a')
+					throw new Error('Invalid intent on element.');
+				window.open(currentControl.href);
 			} else {
-				let target = words.substring(2);
-				const control = currentControl;
-
 				if (
 					control &&
 					control.localName == 'a' &&
