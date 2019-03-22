@@ -124,7 +124,7 @@
 
 			if (e.dataset.wvcatId) {
 				const uuid = getUUID();
-				e.classList.add(uuid);
+				e.setAttribute('data-wvcatUUID', uuid);
 				controls.push({
 					identifier: e.dataset.wvcatId.replace('-', ' '),
 					name: e.localName,
@@ -163,6 +163,10 @@
 							: ''
 					}`;
 				}
+
+				const uuid = control.dataset.wvcatUUID;
+				currentControlIndex = controls.indexOf(control => control.uuid == uuid);
+				setCurrentControl();
 			},
 			true
 		);
@@ -324,7 +328,7 @@
 
 		let closeResults = [];
 		results = results.forEach(result => {
-			if (result.distance <= 3) closeResults.push(result);
+			if (result.distance <= 2) closeResults.push(result);
 		});
 
 		if (closeResults.length > 0)
@@ -403,19 +407,15 @@
 	}
 
 	function findControlByUUID(uuid) {
-		const controls = document.getElementsByClassName(uuid);
-		return controls.length > 0 ? controls[0] : null;
+		return document.querySelector(`[data-wvcatuuid="${uuid}"]`);
 	}
 
 	function getUUID() {
-		return (
-			'wvcat-' +
-			'xxxxxxxx'.replace(/[xy]/g, function(c) {
-				let r = (Math.random() * 16) | 0,
-					v = c == 'x' ? r : (r & 0x3) | 0x8;
-				return v.toString(16);
-			})
-		);
+		return 'xxxxxxxx'.replace(/[xy]/g, function(c) {
+			let r = (Math.random() * 16) | 0,
+				v = c == 'x' ? r : (r & 0x3) | 0x8;
+			return v.toString(16);
+		});
 	}
 })();
 
