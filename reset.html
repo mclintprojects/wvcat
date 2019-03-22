@@ -55,9 +55,11 @@
 		</main>
 		<script>
 			wvcat.initialize();
-			wvcat.addCustomCommand('reset', () =>
-				alert('Password reset successfully sent.')
-			);
+			wvcat.addCustomCommand('reset', reset);
+
+			function reset() {
+				alert('Password reset successfully sent.');
+			}
 		</script>
 	</body>
 </html>

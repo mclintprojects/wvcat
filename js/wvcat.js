@@ -164,8 +164,8 @@
 					}`;
 				}
 
-				const uuid = control.dataset.wvcatUUID;
-				currentControlIndex = controls.indexOf(control => control.uuid == uuid);
+				const uuid = control.dataset.wvcatuuid;
+				currentControlIndex = controls.findIndex(c => c.uuid == uuid);
 				setCurrentControl();
 			},
 			true
