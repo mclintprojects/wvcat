@@ -10,11 +10,6 @@
 	font-family: 'Helvetica', sans-serif;
 }
 
-main {
-	display: flex;
-	height: 100vh;
-}
-
 input {
 	display: block;
 	width: 100%;
@@ -44,4 +39,8 @@ button:hover {
 a,
 p {
 	font-size: 1.2rem;
+}
+
+ul {
+	list-style: none;
 }

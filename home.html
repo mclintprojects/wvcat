@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>SIP - NOTICEBOARD</title>
+		<script src="./js/wvcat.js"></script>
+		<link href="./css/sip.css" rel="stylesheet" />
+		<style>
+			a {
+				text-decoration: none;
+			}
+
+			nav {
+				height: 4.8rem;
+				background: #171b65;
+				display: flex;
+				justify-content: flex-end;
+			}
+
+			nav > ul {
+				display: flex;
+			}
+
+			nav > ul > li {
+				color: white;
+				font-size: 1.2rem;
+				height: 4.8rem;
+				padding: 0 1.6rem;
+				display: flex;
+				align-items: center;
+			}
+
+			nav > ul > li > a {
+				color: white;
+			}
+
+			nav > ul > li:hover {
+				background: #15154a;
+			}
+
+			main {
+				background: white;
+			}
+
+			aside {
+				width: 10%;
+				background: #f7f7f7;
+				padding: 1.6rem;
+				min-height: calc(100vh - 4.8rem);
+			}
+
+			aside > ul {
+				display: flex;
+				flex-direction: column;
+				margin-top: 6rem;
+			}
+
+			aside > ul > li {
+				border-bottom: 0.1rem solid #dae1e8;
+			}
+
+			aside > ul > li:last-child {
+				border-bottom: none;
+			}
+
+			aside > ul > li > a {
+				padding: 1.6rem 0;
+				color: #97a5b7;
+				width: 100%;
+				display: block;
+				font-size: 1.3rem;
+				margin-left: 1.6rem;
+			}
+
+			aside > ul > li > a:hover {
+				color: #363c42;
+			}
+
+			main {
+				display: flex;
+			}
+
+			.main-section {
+				padding: 1.6rem;
+				width: 100%;
+			}
+
+			.title {
+				color: #0088cc;
+				font-size: 1.2rem;
+				margin-bottom: 0.8rem;
+			}
+
+			.profile {
+				width: 100%;
+			}
+
+			.profile > h2 {
+				font-size: 1.8rem;
+				text-transform: uppercase;
+				margin-bottom: 0.8rem;
+				text-align: center;
+				width: 100%;
+				background: #f9f9f9;
+				padding: 0.8rem 0;
+			}
+
+			.details {
+				display: flex;
+				width: 100%;
+				align-items: center;
+			}
+
+			.details ul {
+				display: flex;
+				flex-wrap: wrap;
+				margin-left: 2.4rem;
+				width: 100%;
+				height: 19.2rem;
+			}
+
+			.details ul li {
+				width: 33.3%;
+				font-weight: bold;
+				color: #526273;
+				display: flex;
+				align-items: center;
+				border-bottom: 0.1rem solid #edf2f7;
+			}
+
+			.quick-links {
+				margin-top: 4.8rem;
+			}
+
+			.quick-links ul {
+				display: flex;
+				width: 100%;
+			}
+
+			.quick-link {
+				width: 20%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+
+			.quick-link img {
+				width: 6rem;
+				height: 6rem;
+				border-radius: 50%;
+				background: #0088cc;
+				margin-bottom: 1.6rem;
+			}
+
+			.quick-link a {
+				font-size: 1.8rem;
+				font-weight: bold;
+				color: #29323d;
+				font-style: italic;
+				text-decoration: underline;
+			}
+		</style>
+	</head>
+	<body>
+		<nav>
+			<ul>
+				<li>Welcome, user</li>
+				<li>
+					<a
+						href="/index.html"
+						class="wvcat-element"
+						data-wvcat-id="logout-link"
+						data-wvcat-command="log out"
+						>Logout</a
+					>
+				</li>
+			</ul>
+		</nav>
+		<main>
+			<aside>
+				<ul>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="home-link">Home</a>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="profile-link"
+							>Profile</a
+						>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="courses-link"
+							>Courses</a
+						>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="results-link"
+							>Check results</a
+						>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="faq-link">FAQs</a>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="contact-link"
+							>Contact us</a
+						>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="settings-link"
+							>Settings</a
+						>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="documents-link"
+							>Documents</a
+						>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="graduation-link"
+							>Graduation</a
+						>
+					</li>
+				</ul>
+			</aside>
+			<section class="main-section">
+				<section class="profile">
+					<p class="title">Quick profile</p>
+					<h2>Kwesi Appiah</h2>
+					<div class="details">
+						<img
+							src="https://erp.gtuc.edu.gh/students/studentphotos/040915119.jpg"
+							style="width:192px;height:192px;margin:1px;"
+						/>
+						<ul>
+							<li>
+								<p>Programme: <em>BSc. INFORMATION TECHNOLOGY</em></p>
+							</li>
+							<li>
+								<p>Level: <em>400</em></p>
+							</li>
+							<li>
+								<p>GTUC email: <em>040915010@live.gtuc.edu.gh</em></p>
+							</li>
+							<li>
+								<p>
+									Faculty:
+									<em>BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY</em>
+								</p>
+							</li>
+							<li>
+								<p>Index number: <em>040915119</em></p>
+							</li>
+							<li>
+								<p>Session: <em>Morning</em></p>
+							</li>
+							<li>
+								<p>Mobile number: <em>0247894765</em></p>
+							</li>
+							<li>
+								<p>Personal email: <em>kwesiappiah@gmail.com</em></p>
+							</li>
+							<li>
+								<p>Nationality: <em>Ghanaian</em></p>
+							</li>
+						</ul>
+					</div>
+				</section>
+
+				<section class="quick-links">
+					<p class="title">Quick links</p>
+					<ul>
+						<li class="quick-link">
+							<img />
+							<a
+								href="#"
+								class="wvcat-element"
+								data-wvcat-id="view-profile"
+								data-wvcat-command="view profile"
+								>View profile</a
+							>
+						</li>
+						<li class="quick-link">
+							<img />
+							<a
+								href="#"
+								class="wvcat-element"
+								data-wvcat-id="register-course"
+								data-wvcat-command="register course"
+								>Register course</a
+							>
+						</li>
+						<li class="quick-link">
+							<img />
+							<a
+								href="#"
+								class="wvcat-element"
+								data-wvcat-id="check-result"
+								data-wvcat-command="Check result"
+								>Check result</a
+							>
+						</li>
+						<li class="quick-link">
+							<img />
+							<a
+								href="#"
+								class="wvcat-element"
+								data-wvcat-id="document-request"
+								data-wvcat-command="Document request"
+								>Document request</a
+							>
+						</li>
+						<li class="quick-link">
+							<img />
+							<a
+								href="#"
+								class="wvcat-element"
+								data-wvcat-id="timetable"
+								data-wvcat-command="Download timetable"
+								>Download timetable</a
+							>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</main>
+		<script>
+			wvcat.initialize();
+		</script>
+	</body>
+</html>

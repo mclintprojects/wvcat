@@ -155,9 +155,9 @@
 					indicatorText.innerText = `Currently selected element: ${control.dataset.wvcatId.replace(
 						'-',
 						' '
-					)}${
+					)}. ${
 						control.dataset.wvcatCommand
-							? ` You can say '${
+							? `You can say '${
 									control.dataset.wvcatCommand
 							  }' to perform this action.`
 							: ''

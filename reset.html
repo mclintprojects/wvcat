@@ -29,6 +29,11 @@
 			a {
 				color: white;
 			}
+
+			main {
+				display: flex;
+				height: 100vh;
+			}
 		</style>
 	</head>
 	<body>
@@ -57,7 +62,12 @@
 			wvcat.initialize();
 			wvcat.addCustomCommand('reset', reset);
 
-			function reset() {
+			document
+				.querySelector(`button[data-wvcat-id='reset-button']`)
+				.addEventListener('click', reset);
+
+			function reset(event) {
+				if (event) event.preventDefault();
 				alert('Password reset successfully sent.');
 			}
 		</script>

@@ -45,6 +45,11 @@
 			a {
 				color: #23527c;
 			}
+
+			main {
+				display: flex;
+				height: 100vh;
+			}
 		</style>
 	</head>
 	<body>
@@ -100,6 +105,13 @@
 		<script>
 			wvcat.initialize();
 			wvcat.addCustomCommand('Hello world', () => alert('Hello world'));
+
+			document
+				.querySelector(`button[data-wvcat-id='login-button']`)
+				.addEventListener('click', function(event) {
+					event.preventDefault();
+					window.location.replace(window.location.origin + '/home.html');
+				});
 		</script>
 	</body>
 </html>
