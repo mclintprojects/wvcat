@@ -182,6 +182,7 @@
 		recognizer.onresult = generateTranscript;
 		recognizer.onend = () => {
 			speechRecognizerRunning = false;
+			setTimeout(() => (indicatorText.innerText = ''), 1000);
 		};
 	}
 
@@ -191,7 +192,6 @@
 
 	function setText(text) {
 		recognitionText.innerText = text;
-		//setTimeout(() => (recognitionText.innerText = ''), 2000);
 	}
 
 	function generateTranscript({ results }) {
@@ -205,6 +205,7 @@
 	}
 
 	function executeCommand(transcript) {
+		console.log('wvcat: ' + transcript);
 		const words = transcript.split(' ');
 
 		try {
@@ -239,6 +240,7 @@
 			}
 		} catch (err) {
 			setText(err.message);
+			console.log(err);
 		}
 	}
 
