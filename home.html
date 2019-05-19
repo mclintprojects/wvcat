@@ -173,6 +173,7 @@
 						class="wvcat-element"
 						data-wvcat-id="logout-link"
 						data-wvcat-command="log out"
+						onclick="logout()"
 						>Logout</a
 					>
 				</li>
@@ -332,6 +333,12 @@
 		</main>
 		<script>
 			wvcat.initialize();
+
+			wvcat.addCustomCommand('logout', logout);
+			function logout(event) {
+				if (event) event.preventDefault();
+				window.location.replace(window.location.origin + '/index.html');
+			}
 
 			wvcat.addCustomCommand('view profile', viewProfile);
 			function viewProfile() {

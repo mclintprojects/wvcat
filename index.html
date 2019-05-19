@@ -82,7 +82,9 @@
 						<a
 							href="/reset.html"
 							class="wvcat-element"
-							data-wvcat-id="reset-link"
+							data-wvcat-id="reset-password-link"
+							data-wvcat-command="reset password"
+							onclick="resetPassword()"
 							>here</a
 						>
 						to do a password reset.
@@ -104,7 +106,9 @@
 		</main>
 		<script>
 			wvcat.initialize();
-			wvcat.addCustomCommand('Hello world', () => alert('Hello world'));
+			wvcat.addCustomCommand('login', () =>
+				document.querySelector(`button[data-wvcat-id='login-button']`).click()
+			);
 
 			document
 				.querySelector(`button[data-wvcat-id='login-button']`)
@@ -112,6 +116,14 @@
 					event.preventDefault();
 					window.location.replace(window.location.origin + '/home.html');
 				});
+
+			wvcat.addCustomCommand('reset password', resetPassword);
+			function resetPassword(event) {
+				if (!event)
+					document
+						.querySelector("a[data-wvcat-id='reset-password-link']")
+						.click();
+			}
 		</script>
 	</body>
 </html>

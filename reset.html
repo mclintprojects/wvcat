@@ -54,7 +54,14 @@
 						Reset Password
 					</button>
 
-					<a href="/index.html"><< Back to Login page</a>
+					<a
+						href="/index.html"
+						class="wvcat-element"
+						data-wvcat-id="go-back-link"
+						data-wvcat-command="go back"
+						onclick="goBack()"
+						><< Back to Login page</a
+					>
 				</form>
 			</section>
 		</main>
@@ -69,6 +76,12 @@
 			function reset(event) {
 				if (event) event.preventDefault();
 				alert('Password reset successfully sent.');
+			}
+
+			wvcat.addCustomCommand('go back', goBack);
+			function goBack(event) {
+				if (!event)
+					document.querySelector("a[data-wvcat-id='go-back-link']").click();
 			}
 		</script>
 	</body>

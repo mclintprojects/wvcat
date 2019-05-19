@@ -126,7 +126,7 @@
 				const uuid = getUUID();
 				e.setAttribute('data-wvcatUUID', uuid);
 				controls.push({
-					identifier: e.dataset.wvcatId.replace('-', ' '),
+					identifier: e.dataset.wvcatId.replace(/-/g, ' '),
 					name: e.localName,
 					type: e.type,
 					uuid
@@ -153,7 +153,7 @@
 				const control = event.target;
 				if (control.classList.contains('wvcat-element')) {
 					indicatorText.innerText = `Currently selected element: ${control.dataset.wvcatId.replace(
-						'-',
+						/-/g,
 						' '
 					)}. ${
 						control.dataset.wvcatCommand
@@ -252,23 +252,27 @@
 	}
 
 	function executeCustomCommand(transcript) {
+		let commandExists = false,
+			command;
 		for (let i = 0; i < customCommands.length; i++) {
-			const command = customCommands[i];
-			const result = command.regex.exec(transcript);
-			if (result) {
-				command.callback.apply(this, result.slice(1));
-				break;
-			} else {
-				const nearestCommandMatch = nearestMatch(
-					transcript,
-					customCommands.map(c => c.command)
-				);
+			command = customCommands[i];
+			commandExists = command.regex.test(transcript);
 
-				if (nearestCommandMatch) {
-					executeCommand(nearestCommandMatch);
-					break;
-				} else throw new Error(`Could not execute '${transcript}'.`);
-			}
+			if (commandExists) break;
+		}
+
+		if (commandExists) {
+			const result = command.regex.exec(transcript);
+			command.callback.apply(this, result.slice(1));
+		} else {
+			const nearestCommandMatch = nearestMatch(
+				transcript,
+				customCommands.map(c => c.command)
+			);
+
+			if (nearestCommandMatch) {
+				executeCommand(nearestCommandMatch);
+			} else throw new Error(`Could not execute '${transcript}'.`);
 		}
 	}
 
