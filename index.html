@@ -4,125 +4,365 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-		<title>SIP | Login</title>
+		<title>SIP - NOTICEBOARD</title>
 		<script src="./js/wvcat.js"></script>
 		<link href="./css/sip.css" rel="stylesheet" />
 		<style>
-			.branding {
-				width: 77%;
-				background: url('https://erp.gtuc.edu.gh/sip/images/login-cover.jpg');
-				background-repeat: no-repeat;
-			}
-
-			.login-form {
-				border-left: 0.5rem solid var(--primary-color);
-				padding: 3rem 6rem;
-				width: 50rem;
-			}
-
-			form {
-				padding-top: 1.6rem;
-				width: 100%;
-				margin: auto;
-			}
-
-			button + p {
-				color: rgba(0, 0, 0, 0.54);
-			}
-
-			hr {
-				margin-top: 6rem;
-				border: 0.2rem solid var(--primary-color);
-				margin-bottom: 2.4rem;
-			}
-
-			hr + span {
-				display: block;
-				margin: auto;
-				text-align: center;
-			}
-
 			a {
-				color: #23527c;
+				text-decoration: none;
+			}
+
+			nav {
+				height: 4.8rem;
+				background: #171b65;
+				display: flex;
+				justify-content: flex-end;
+			}
+
+			nav > ul {
+				display: flex;
+			}
+
+			nav > ul > li {
+				color: white;
+				font-size: 1.2rem;
+				height: 4.8rem;
+				padding: 0 1.6rem;
+				display: flex;
+				align-items: center;
+			}
+
+			nav > ul > li > a {
+				color: white;
+			}
+
+			nav > ul > li:hover {
+				background: #15154a;
+			}
+
+			main {
+				background: white;
+			}
+
+			aside {
+				width: 10%;
+				background: #f7f7f7;
+				padding: 1.6rem;
+				min-height: calc(100vh - 4.8rem);
+			}
+
+			aside > ul {
+				display: flex;
+				flex-direction: column;
+				margin-top: 6rem;
+			}
+
+			aside > ul > li {
+				border-bottom: 0.1rem solid #dae1e8;
+			}
+
+			aside > ul > li:last-child {
+				border-bottom: none;
+			}
+
+			aside > ul > li > a {
+				padding: 1.6rem 0;
+				color: #97a5b7;
+				width: 100%;
+				display: block;
+				font-size: 1.3rem;
+				margin-left: 1.6rem;
+			}
+
+			aside > ul > li > a:hover {
+				color: #363c42;
 			}
 
 			main {
 				display: flex;
-				height: 100vh;
+			}
+
+			.main-section {
+				padding: 1.6rem;
+				width: 100%;
+			}
+
+			.title {
+				color: #0088cc;
+				font-size: 1.2rem;
+				margin-bottom: 0.8rem;
+			}
+
+			.profile {
+				width: 100%;
+			}
+
+			.profile > h2 {
+				font-size: 1.8rem;
+				text-transform: uppercase;
+				margin-bottom: 0.8rem;
+				text-align: center;
+				width: 100%;
+				background: #f9f9f9;
+				padding: 0.8rem 0;
+			}
+
+			.details {
+				display: flex;
+				width: 100%;
+				align-items: center;
+			}
+
+			.details ul {
+				display: flex;
+				flex-wrap: wrap;
+				margin-left: 2.4rem;
+				width: 100%;
+				height: 19.2rem;
+			}
+
+			.details ul li {
+				width: 33.3%;
+				font-weight: bold;
+				color: #526273;
+				display: flex;
+				align-items: center;
+				border-bottom: 0.1rem solid #edf2f7;
+			}
+
+			.quick-links {
+				margin-top: 4.8rem;
+			}
+
+			.quick-links ul {
+				display: flex;
+				width: 100%;
+			}
+
+			.quick-link {
+				width: 20%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+
+			.quick-link img {
+				width: 6rem;
+				height: 6rem;
+				border-radius: 50%;
+				background: #0088cc;
+				margin-bottom: 1.6rem;
+			}
+
+			.quick-link a {
+				font-size: 1.8rem;
+				font-weight: bold;
+				color: #29323d;
+				font-style: italic;
+				text-decoration: underline;
 			}
 		</style>
 	</head>
 	<body>
-		<main>
-			<section class="branding"></section>
-			<section class="login-form">
-				<img
-					src="https://erp.gtuc.edu.gh/sip/images/siploginlogo.png"
-					alt="gtuc sip login logo"
-				/>
-				<form>
-					<input
-						type="text"
+		<nav>
+			<ul>
+				<li>Welcome, user</li>
+				<li>
+					<a
+						href="/index.html"
 						class="wvcat-element"
-						data-wvcat-id="email-input"
-						placeholder="GTUC email address"
-					/>
-					<input
-						type="password"
-						class="wvcat-element"
-						data-wvcat-id="password-input"
-						placeholder="Password"
-					/>
-					<button type="btn" class="wvcat-element" data-wvcat-id="login-button">
-						Login
-					</button>
-
-					<p>
-						Forgot your password? Click
-						<a
-							href="/reset.html"
-							class="wvcat-element"
-							data-wvcat-id="reset-password-link"
-							data-wvcat-command="reset password"
-							onclick="resetPassword()"
-							>here</a
-						>
-						to do a password reset.
-					</p>
-
-					<hr />
-
-					<span
-						>&copy;
-						<a
-							href="https://gtuc.edu.gh"
-							class="wvcat-element"
-							data-wvcat-id="gtuc-link"
-							>GTUC. All Right Reserved</a
-						></span
+						data-wvcat-id="logout-link"
+						data-wvcat-command="log out"
+						onclick="logout()"
+						>Logout</a
 					>
-				</form>
+				</li>
+			</ul>
+		</nav>
+		<main>
+			<aside>
+				<ul>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="home-link">Home</a>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="profile-link"
+							>Profile</a
+						>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="courses-link"
+							>Courses</a
+						>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="results-link"
+							>Check results</a
+						>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="faq-link">FAQs</a>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="contact-link"
+							>Contact us</a
+						>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="settings-link"
+							>Settings</a
+						>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="documents-link"
+							>Documents</a
+						>
+					</li>
+					<li>
+						<a href="#" class="wvcat-element" data-wvcat-id="graduation-link"
+							>Graduation</a
+						>
+					</li>
+				</ul>
+			</aside>
+			<section class="main-section">
+				<section class="profile">
+					<p class="title">Quick profile</p>
+					<h2>Kwesi Appiah</h2>
+					<div class="details">
+						<img
+							src="https://erp.gtuc.edu.gh/students/studentphotos/040915119.jpg"
+							style="width:192px;height:192px;margin:1px;"
+						/>
+						<ul>
+							<li>
+								<p>Programme: <em>BSc. INFORMATION TECHNOLOGY</em></p>
+							</li>
+							<li>
+								<p>Level: <em>400</em></p>
+							</li>
+							<li>
+								<p>GTUC email: <em>040915010@live.gtuc.edu.gh</em></p>
+							</li>
+							<li>
+								<p>
+									Faculty:
+									<em>BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY</em>
+								</p>
+							</li>
+							<li>
+								<p>Index number: <em>040915119</em></p>
+							</li>
+							<li>
+								<p>Session: <em>Morning</em></p>
+							</li>
+							<li>
+								<p>Mobile number: <em>0247894765</em></p>
+							</li>
+							<li>
+								<p>Personal email: <em>kwesiappiah@gmail.com</em></p>
+							</li>
+							<li>
+								<p>Nationality: <em>Ghanaian</em></p>
+							</li>
+						</ul>
+					</div>
+				</section>
+
+				<section class="quick-links">
+					<p class="title">Quick links</p>
+					<ul>
+						<li class="quick-link">
+							<img />
+							<a
+								href="#"
+								class="wvcat-element"
+								data-wvcat-id="view-profile"
+								data-wvcat-command="view profile"
+								onclick="viewProfile()"
+								>View profile</a
+							>
+						</li>
+						<li class="quick-link">
+							<img />
+							<a
+								href="#"
+								class="wvcat-element"
+								data-wvcat-id="register-course"
+								data-wvcat-command="register course"
+								onclick="registerCourse()"
+								>Register course</a
+							>
+						</li>
+						<li class="quick-link">
+							<img />
+							<a
+								href="#"
+								class="wvcat-element"
+								data-wvcat-id="check-result"
+								data-wvcat-command="Check result"
+								onclick="checkResult()"
+								>Check result</a
+							>
+						</li>
+						<li class="quick-link">
+							<img />
+							<a
+								href="#"
+								class="wvcat-element"
+								data-wvcat-id="document-request"
+								data-wvcat-command="Document request"
+								onclick="documentRequest()"
+								>Document request</a
+							>
+						</li>
+						<li class="quick-link">
+							<img />
+							<a
+								href="#"
+								class="wvcat-element"
+								data-wvcat-id="download-timetable"
+								data-wvcat-command="Download timetable"
+								onclick="downloadTimetable()"
+								>Download timetable</a
+							>
+						</li>
+					</ul>
+				</section>
 			</section>
 		</main>
 		<script>
 			wvcat.initialize();
-			wvcat.addCustomCommand('login', () =>
-				document.querySelector(`button[data-wvcat-id='login-button']`).click()
-			);
 
-			document
-				.querySelector(`button[data-wvcat-id='login-button']`)
-				.addEventListener('click', function(event) {
-					event.preventDefault();
-					window.location.replace(window.location.origin + '/home.html');
-				});
+			wvcat.addCustomCommand('logout', logout);
+			function logout(event) {
+				if (event) event.preventDefault();
+				window.location.replace(window.location.origin + '/index.html');
+			}
 
-			wvcat.addCustomCommand('reset password', resetPassword);
-			function resetPassword(event) {
-				if (!event)
-					document
-						.querySelector("a[data-wvcat-id='reset-password-link']")
-						.click();
+			wvcat.addCustomCommand('view profile', viewProfile);
+			function viewProfile() {
+				alert('Profile viewed.');
+			}
+
+			wvcat.addCustomCommand('register course', registerCourse);
+			function registerCourse() {
+				alert('Course registered.');
+			}
+
+			wvcat.addCustomCommand('check result', checkResult);
+			function checkResult() {
+				alert('Result checked.');
+			}
+
+			wvcat.addCustomCommand('document request', documentRequest);
+			function documentRequest() {
+				alert('Document requested.');
+			}
+
+			wvcat.addCustomCommand('download timetable', downloadTimetable);
+			function downloadTimetable() {
+				alert('Timetable downloaded.');
 			}
 		</script>
 	</body>
