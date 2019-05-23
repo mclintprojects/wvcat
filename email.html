@@ -41,7 +41,7 @@
 							v-for="(email, index) in emails"
 							:key="index"
 							class="wvcat-element"
-							:data-wvcat-id="index+1"
+							:data-wvcat-id="`email-${index+1}`"
 						>
 							<input type="checkbox" v-model="email.selected" />
 							<img :src="starredSrc(email.starred)" />
@@ -89,10 +89,10 @@
 							: 'https://image.flaticon.com/icons/svg/25/25291.svg';
 					}
 				},
-				created() {
-					wvcat.initialize();
-				}
+				created() {}
 			});
+
+			wvcat.initialize();
 		</script>
 	</body>
 </html>

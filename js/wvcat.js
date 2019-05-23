@@ -153,22 +153,24 @@
 			'focus',
 			function(event) {
 				const control = event.target;
-				if (control.classList.contains('wvcat-element')) {
-					indicatorText.innerText = `Currently selected element: ${control.dataset.wvcatId.replace(
-						/-/g,
-						' '
-					)}. ${
-						control.dataset.wvcatCommand
-							? `You can say '${
-									control.dataset.wvcatCommand
-							  }' to perform this action.`
-							: ''
-					}`;
-				}
+				if (control.dataset.wvcatuuid) {
+					if (control.classList.contains('wvcat-element')) {
+						indicatorText.innerText = `Currently selected element: ${control.dataset.wvcatId.replace(
+							/-/g,
+							' '
+						)}. ${
+							control.dataset.wvcatCommand
+								? `You can say '${
+										control.dataset.wvcatCommand
+								  }' to perform this action.`
+								: ''
+						}`;
+					}
 
-				const uuid = control.dataset.wvcatuuid;
-				currentControlIndex = controls.findIndex(c => c.uuid == uuid);
-				setCurrentControl();
+					const uuid = control.dataset.wvcatuuid;
+					currentControlIndex = controls.findIndex(c => c.uuid == uuid);
+					setCurrentControl();
+				}
 			},
 			true
 		);
