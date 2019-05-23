@@ -107,6 +107,8 @@
 								margin: 0 auto;
 								padding: 16px;
 								font-family: 'Arial';
+								color: black;
+								font-size: 16px;
 							}
 
 							.wvcat-highlight {
@@ -223,7 +225,7 @@
 					break;
 
 				case 'click':
-					executeClickIntent();
+					executeClickIntent(words);
 					break;
 
 				case 'open':
@@ -381,26 +383,26 @@
 			if (words.length == 1) {
 				if (currentControl.localName != 'a')
 					throw new Error('Invalid intent on element.');
-				window.open(currentControl.href);
+				window.location.replace(control.href);
 			} else {
-				if (
-					control &&
-					control.localName == 'a' &&
-					(target == 'same tab' || target == 'new tab')
-				) {
-					target == 'same tab'
-						? window.location.replace(control.href)
-						: window.open(control.href);
-				}
+				if (control && control.localName == 'a' && target == 'new tab') {
+					window.open(control.href);
+				} else throw new Error('Invalid link navigation intent command.');
 			}
 
 			setSuccessExecutionMessage();
 		} else throw new Error('Invalid link navigation intent command.');
 	}
 
-	function executeClickIntent() {
-		currentControl.click();
-		setSuccessExecutionMessage();
+	function executeClickIntent(words) {
+		const controlName = words.substring(1);
+		const controlIndex = controls.findIndex(c => c.identifier == controlName);
+		if (controlIndex != -1) {
+			currentControlIndex = controlIndex;
+			setCurrentControl();
+			currentControl.click();
+			setSuccessExecutionMessage();
+		} else throw new Error('Invalid click intent command.');
 	}
 
 	// ------- Intent executors

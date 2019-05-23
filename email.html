@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Gmail</title>
+		<link href="./css/gmail.css" rel="stylesheet" />
+		<script src="./js/wvcat.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+	</head>
+	<body>
+		<div class="app">
+			<nav>
+				<p>Qmail</p>
+				<input
+					type="text"
+					v-model="searchQuery"
+					placeholder="Search mail"
+					class="wvcat-element"
+					data-wvcat-id="search-input"
+				/>
+			</nav>
+			<main>
+				<aside>
+					<button class="wvcat-element" data-wvcat-id="compose-button">
+						Compose
+					</button>
+					<ul>
+						<li class="wvcat-element" data-wvcat-id="inbox">Inbox</li>
+						<li class="wvcat-element" data-wvcat-id="starred">Starred</li>
+						<li class="wvcat-element" data-wvcat-id="snoozed">Snoozed</li>
+						<li class="wvcat-element" data-wvcat-id="important">Important</li>
+						<li class="wvcat-element" data-wvcat-id="sent">Sent</li>
+						<li class="wvcat-element" data-wvcat-id="drafts">Drafts</li>
+					</ul>
+				</aside>
+				<div>
+					<ul class="emails">
+						<li
+							v-for="(email, index) in emails"
+							:key="index"
+							class="wvcat-element"
+							:data-wvcat-id="index+1"
+						>
+							<input type="checkbox" v-model="email.selected" />
+							<img :src="starredSrc(email.starred)" />
+							<p>{{ email.sender.name }}</p>
+							<p>
+								<span>{{ email.subject }}</span
+								>- {{ email.body }}
+							</p>
+						</li>
+					</ul>
+				</div>
+			</main>
+		</div>
+		<script>
+			new Vue({
+				el: '.app',
+				data: {
+					searchQuery: '',
+					emails: [
+						{
+							sender: { name: 'Jane Doe', email: 'janedoe@gmail.com' },
+							subject: 'Necessary newspaper',
+							body:
+								'Necessary ye contented newspaper zealously breakfast he prevailed. Melancholy middletons yet understood decisively boy law she.',
+							sent: '7:11 AM',
+							selected: false,
+							starred: false
+						},
+						{
+							sender: { name: 'Jack Doe', email: 'jackdoe@gmail.com' },
+							subject: 'Material expenses',
+							body:
+								'Expenses as material breeding insisted building to in. Continual so distrusts pronounce by unwilling listening. ',
+							sent: '8:12 AM',
+							selected: false,
+							starred: false
+						}
+					]
+				},
+				computed: {},
+				methods: {
+					starredSrc(starred) {
+						return starred
+							? 'https://image.flaticon.com/icons/svg/148/148839.svg'
+							: 'https://image.flaticon.com/icons/svg/25/25291.svg';
+					}
+				},
+				created() {
+					wvcat.initialize();
+				}
+			});
+		</script>
+	</body>
+</html>
