@@ -41,10 +41,22 @@
 							v-for="(email, index) in emails"
 							:key="index"
 							class="wvcat-element"
-							:data-wvcat-id="`email-${index+1}`"
+							data-wvcat-listitem="email"
+							:data-wvcat-meta="index"
 						>
-							<input type="checkbox" v-model="email.selected" />
-							<img :src="starredSrc(email.starred)" />
+							<input
+								class="wvcat-element"
+								data-wvcat-listitem="email-select"
+								:data-wvcat-meta="index"
+								type="checkbox"
+								v-model="email.selected"
+							/>
+							<img
+								class="wvcat-element"
+								data-wvcat-listitem="email-star"
+								:data-wvcat-meta="index"
+								:src="starredSrc(email.starred)"
+							/>
 							<p>{{ email.sender.name }}</p>
 							<p>
 								<span>{{ email.subject }}</span
@@ -62,6 +74,7 @@
 					searchQuery: '',
 					emails: [
 						{
+							id: 1,
 							sender: { name: 'Jane Doe', email: 'janedoe@gmail.com' },
 							subject: 'Necessary newspaper',
 							body:
@@ -71,6 +84,7 @@
 							starred: false
 						},
 						{
+							id: 2,
 							sender: { name: 'Jack Doe', email: 'jackdoe@gmail.com' },
 							subject: 'Material expenses',
 							body:

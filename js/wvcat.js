@@ -78,6 +78,20 @@
 		currentControl = findControlByUUID(controls[currentControlIndex].uuid);
 		currentControl.classList.add('wvcat-highlight');
 		currentControl.focus();
+		showControlDetails();
+	}
+
+	function showControlDetails() {
+		indicatorText.innerText = `Currently selected element: ${currentControl.dataset.wvcatId.replace(
+			/-/g,
+			' '
+		)}. ${
+			currentControl.dataset.wvcatCommand
+				? `You can say '${
+						control.dataset.wvcatCommand
+				  }' to perform this action.`
+				: ''
+		}`;
 	}
 
 	function attachRecognitionContainerToDocument() {
@@ -124,14 +138,25 @@
 		for (let i = 0; i < elements.length; i++) {
 			let e = elements[i];
 
+			const uuid = getUUID();
+			e.setAttribute('data-wvcatUUID', uuid);
+
 			if (e.dataset.wvcatId) {
-				const uuid = getUUID();
-				e.setAttribute('data-wvcatUUID', uuid);
 				controls.push({
 					identifier: e.dataset.wvcatId.replace(/-/g, ' '),
 					name: e.localName,
 					type: e.type,
 					uuid
+				});
+			} else if (e.dataset.wvcatListitem) {
+				e.setAttribute('data-wvcat-id', uuid);
+				controls.push({
+					identifier: uuid,
+					name: e.localName,
+					type: e.type,
+					uuid,
+					item: e.dataset.wvcatListitem.replace(/-/g, ' '),
+					meta: e.dataset.wvcatMeta
 				});
 			}
 		}
@@ -154,19 +179,6 @@
 			function(event) {
 				const control = event.target;
 				if (control.dataset.wvcatuuid) {
-					if (control.classList.contains('wvcat-element')) {
-						indicatorText.innerText = `Currently selected element: ${control.dataset.wvcatId.replace(
-							/-/g,
-							' '
-						)}. ${
-							control.dataset.wvcatCommand
-								? `You can say '${
-										control.dataset.wvcatCommand
-								  }' to perform this action.`
-								: ''
-						}`;
-					}
-
 					const uuid = control.dataset.wvcatuuid;
 					currentControlIndex = controls.findIndex(c => c.uuid == uuid);
 					setCurrentControl();
@@ -330,7 +342,7 @@
 		return v0[s1_len];
 	}
 
-	function nearestMatch(original, testWords) {
+	function nearestMatch(original, testWords, distance = 2) {
 		let results = testWords.map(w => ({
 			distance: levenshtein(original, w),
 			word: w
@@ -338,7 +350,7 @@
 
 		let closeResults = [];
 		results = results.forEach(result => {
-			if (result.distance <= 2) closeResults.push(result);
+			if (result.distance <= distance) closeResults.push(result);
 		});
 
 		if (closeResults.length > 0)
@@ -357,7 +369,7 @@
 
 	function executeSelectControlIntent(words) {
 		const controlName = words.substring(1);
-		const controlIndex = controls.findIndex(c => c.identifier == controlName);
+		const controlIndex = findControlIndex(controlName);
 		if (controlIndex != -1) {
 			currentControlIndex = controlIndex;
 			setCurrentControl();
@@ -398,7 +410,7 @@
 
 	function executeClickIntent(words) {
 		const controlName = words.substring(1);
-		const controlIndex = controls.findIndex(c => c.identifier == controlName);
+		const controlIndex = findControlIndex(controlName);
 		if (controlIndex != -1) {
 			currentControlIndex = controlIndex;
 			setCurrentControl();
@@ -414,6 +426,24 @@
 			case 'link':
 				return words.length == 1 || (words.length > 2 && words[1] == 'in');
 		}
+	}
+
+	function findControlIndex(query) {
+		const firstResult = controls.findIndex(
+			c => c.identifier == query || c.item == query
+		);
+		if (firstResult == -1) {
+			const nearestResult = nearestMatch(
+				query,
+				controls.map(c => c.item || c.identifier),
+				3
+			);
+			return controls.findIndex(
+				c => c.identifier == nearestResult || c.item == nearestResult
+			);
+		}
+
+		return firstResult;
 	}
 
 	function findControlByUUID(uuid) {
