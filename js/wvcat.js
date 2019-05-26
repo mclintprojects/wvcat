@@ -80,7 +80,7 @@
 		currentControl = findControlByUUID(controls[currentControlIndex].uuid);
 		currentControl.classList.add('wvcat-highlight');
 		currentControl.focus();
-		showControlDetails();
+		setTimeout(() => showControlDetails(), 300);
 	}
 
 	function showControlDetails() {
@@ -285,15 +285,9 @@
 		if (commandExists) {
 			const result = command.regex.exec(transcript);
 			const control = controls[currentControlIndex];
-			if (
-				control.identifier == command.control ||
-				control.item == command.control
-			) {
-				control.meta
-					? command.callback.call(this, control.meta, ...result.slice(1))
-					: command.callback.apply(this, result.slice(1));
-			} else
-				throw new Error(`Could not execute '${transcript}' on this element.`);
+			control.meta
+				? command.callback.call(this, control.meta, ...result.slice(1))
+				: command.callback.apply(this, result.slice(1));
 		} else {
 			const nearestCommandMatch = nearestMatch(
 				transcript,
