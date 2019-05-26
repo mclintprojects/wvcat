@@ -101,9 +101,19 @@
 						return starred
 							? 'https://image.flaticon.com/icons/svg/148/148839.svg'
 							: 'https://image.flaticon.com/icons/svg/25/25291.svg';
+					},
+					starEmail(index) {
+						this.emails[index].starred = true;
+					},
+					unstarEmail(index) {
+						this.emails[index].starred = false;
+						console.log('unstar');
 					}
 				},
-				created() {}
+				created() {
+					wvcat.addCustomCommand('email', 'star email', this.starEmail);
+					wvcat.addCustomCommand('email', 'unstar email', this.unstarEmail);
+				}
 			});
 
 			wvcat.initialize();

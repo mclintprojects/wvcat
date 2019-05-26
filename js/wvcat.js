@@ -40,10 +40,11 @@
 
 	this.execute = command => executeCommand(command);
 
-	this.addCustomCommand = (command, callback) => {
+	this.addCustomCommand = (control, command, callback) => {
 		command = command.toLowerCase();
 		const regex = commandToRegExp(command);
 		customCommands.push({
+			control,
 			regex,
 			callback,
 			command
@@ -63,7 +64,7 @@
 				return optional ? match : '([\\s]+)';
 			})
 			.replace(splatParam, '(.*?)');
-		return new RegExp('' + command + '$', 'i');
+		return new RegExp('^' + command + '$', 'i');
 	}
 
 	function highlightFirstControllableElement() {
@@ -217,7 +218,7 @@
 			if (result.isFinal) transcript += result[0].transcript;
 		}
 
-		executeCommand(transcript);
+		executeCommand(transcript.toLowerCase());
 	}
 
 	function executeCommand(transcript) {
@@ -279,7 +280,14 @@
 
 		if (commandExists) {
 			const result = command.regex.exec(transcript);
-			command.callback.apply(this, result.slice(1));
+			const control = controls[currentControlIndex];
+			if (
+				control.identifier == command.control ||
+				control.item == command.control
+			)
+				command.callback.call(this, control.meta, ...result.slice(1));
+			else
+				throw new Error(`Could not execute '${transcript}' on this element.`);
 		} else {
 			const nearestCommandMatch = nearestMatch(
 				transcript,
@@ -355,7 +363,7 @@
 
 		if (closeResults.length > 0)
 			return closeResults.sort(
-				(result1, result2) => result1.distance > result2.distance
+				(result1, result2) => result1.distance - result2.distance
 			)[0].word;
 
 		return null;
