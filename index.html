@@ -172,7 +172,6 @@
 						href="/index.html"
 						class="wvcat-element"
 						data-wvcat-id="logout-link"
-						data-wvcat-command="log out"
 						onclick="logout()"
 						>Logout</a
 					>
@@ -278,7 +277,6 @@
 								href="#"
 								class="wvcat-element"
 								data-wvcat-id="view-profile"
-								data-wvcat-command="view profile"
 								onclick="viewProfile()"
 								>View profile</a
 							>
@@ -289,7 +287,6 @@
 								href="#"
 								class="wvcat-element"
 								data-wvcat-id="register-course"
-								data-wvcat-command="register course"
 								onclick="registerCourse()"
 								>Register course</a
 							>
@@ -300,7 +297,6 @@
 								href="#"
 								class="wvcat-element"
 								data-wvcat-id="check-result"
-								data-wvcat-command="Check result"
 								onclick="checkResult()"
 								>Check result</a
 							>
@@ -311,7 +307,6 @@
 								href="#"
 								class="wvcat-element"
 								data-wvcat-id="document-request"
-								data-wvcat-command="Document request"
 								onclick="documentRequest()"
 								>Document request</a
 							>
@@ -322,7 +317,6 @@
 								href="#"
 								class="wvcat-element"
 								data-wvcat-id="download-timetable"
-								data-wvcat-command="Download timetable"
 								onclick="downloadTimetable()"
 								>Download timetable</a
 							>
@@ -334,33 +328,45 @@
 		<script>
 			wvcat.initialize();
 
-			wvcat.addCustomCommand('logout', logout);
+			wvcat.addCustomCommand('logout-link', 'logout', logout);
 			function logout(event) {
 				if (event) event.preventDefault();
 				window.location.replace(window.location.origin + '/index.html');
 			}
 
-			wvcat.addCustomCommand('view profile', viewProfile);
+			wvcat.addCustomCommand('view-profile', 'view profile', viewProfile);
 			function viewProfile() {
 				alert('Profile viewed.');
 			}
 
-			wvcat.addCustomCommand('register course', registerCourse);
+			wvcat.addCustomCommand(
+				'register-course',
+				'register course',
+				registerCourse
+			);
 			function registerCourse() {
 				alert('Course registered.');
 			}
 
-			wvcat.addCustomCommand('check result', checkResult);
+			wvcat.addCustomCommand('check-result', 'check result', checkResult);
 			function checkResult() {
 				alert('Result checked.');
 			}
 
-			wvcat.addCustomCommand('document request', documentRequest);
+			wvcat.addCustomCommand(
+				'document-request',
+				'document request',
+				documentRequest
+			);
 			function documentRequest() {
 				alert('Document requested.');
 			}
 
-			wvcat.addCustomCommand('download timetable', downloadTimetable);
+			wvcat.addCustomCommand(
+				'download-timetable',
+				'download timetable',
+				downloadTimetable
+			);
 			function downloadTimetable() {
 				alert('Timetable downloaded.');
 			}
