@@ -19,7 +19,8 @@
 			'click',
 			'click',
 			'open',
-			'select'
+			'select',
+			'show reference'
 		];
 
 	this.initialize = function(options) {
@@ -44,7 +45,7 @@
 		command = command.toLowerCase();
 		const regex = commandToRegExp(command);
 		customCommands.push({
-			control,
+			control: control.replace(/-/g, ' '),
 			regex,
 			callback,
 			command
@@ -61,7 +62,7 @@
 		command = command
 			.replace(escapeRegExp, '\\$&')
 			.replace(namedParam, function(match, optional) {
-				return optional ? match : '([\\s]+)';
+				return optional ? match : '([\\w]+)';
 			})
 			.replace(splatParam, '(.*?)');
 		return new RegExp('^' + command + '$', 'i');
@@ -83,16 +84,11 @@
 	}
 
 	function showControlDetails() {
-		indicatorText.innerText = `Currently selected element: ${currentControl.dataset.wvcatId.replace(
-			/-/g,
-			' '
-		)}. ${
-			currentControl.dataset.wvcatCommand
-				? `You can say '${
-						control.dataset.wvcatCommand
-				  }' to perform this action.`
-				: ''
-		}`;
+		const control = controls[currentControlIndex];
+		const name = control.item || control.identifier;
+		setText(
+			`Currently selected element: ${name}. You can say 'show reference' to know the possible commands for this element.`
+		);
 	}
 
 	function attachRecognitionContainerToDocument() {
@@ -201,6 +197,11 @@
 			speechRecognizerRunning = false;
 			setTimeout(() => (indicatorText.innerText = ''), 1000);
 		};
+		recognizer.onerror = () => {
+			setText(
+				'Failed to start speech recognizer. Please ensure that you have allowed this page to access your microphone.'
+			);
+		};
 	}
 
 	function startSpeechRecognizer() {
@@ -226,34 +227,37 @@
 		const words = transcript.split(' ');
 
 		try {
-			switch (words[0].toLowerCase()) {
-				case 'next':
-					executeNextElementIntent();
-					break;
+			if (transcript == 'show reference') executeShowReferenceIntent();
+			else {
+				switch (words[0].toLowerCase()) {
+					case 'next':
+						executeNextElementIntent();
+						break;
 
-				case 'previous':
-					executePreviousElementIntent();
-					break;
+					case 'previous':
+						executePreviousElementIntent();
+						break;
 
-				case 'clear':
-					executeTypingIntent('clear', words);
-					break;
+					case 'clear':
+						executeClearIntent();
+						break;
 
-				case 'click':
-					executeClickIntent(words);
-					break;
+					case 'click':
+						executeClickIntent(words);
+						break;
 
-				case 'open':
-					executeNavigateToLinkIntent(words);
-					break;
+					case 'open':
+						executeNavigateToLinkIntent(words);
+						break;
 
-				case 'select':
-					executeSelectControlIntent(words);
-					break;
+					case 'select':
+						executeSelectControlIntent(words);
+						break;
 
-				default:
-					handleCustomCommand(words[0], words);
-					break;
+					default:
+						handleCustomCommand(words[0], words);
+						break;
+				}
 			}
 		} catch (err) {
 			setText(err.message);
@@ -284,9 +288,11 @@
 			if (
 				control.identifier == command.control ||
 				control.item == command.control
-			)
-				command.callback.call(this, control.meta, ...result.slice(1));
-			else
+			) {
+				control.meta
+					? command.callback.call(this, control.meta, ...result.slice(1))
+					: command.callback.apply(this, result.slice(1));
+			} else
 				throw new Error(`Could not execute '${transcript}' on this element.`);
 		} else {
 			const nearestCommandMatch = nearestMatch(
@@ -371,6 +377,18 @@
 
 	// ------- Intent executors
 
+	function executeShowReferenceIntent() {
+		const control = controls[currentControlIndex];
+		const name = control.item || control.identifier;
+		const commandsForCurrentControl = customCommands
+			.filter(c => c.control == name)
+			.map(c => c.command);
+		const allCommands = [...wvcatKeywords, ...commandsForCurrentControl];
+
+		const text = `Possible commands for ${name}\n\n${allCommands.join('\n')}`;
+		setText(text);
+	}
+
 	function setSuccessExecutionMessage() {
 		setText(`Executed command: successfully.`);
 	}
@@ -425,6 +443,11 @@
 			currentControl.click();
 			setSuccessExecutionMessage();
 		} else throw new Error('Invalid click intent command.');
+	}
+
+	function executeClearIntent() {
+		currentControl.value = '';
+		currentControl.dispatchEvent(new Event('input'));
 	}
 
 	// ------- Intent executors

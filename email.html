@@ -70,9 +70,20 @@
 		<script>
 			new Vue({
 				el: '.app',
+				computed: {
+					emails() {
+						const query = this.searchQuery.toLowerCase();
+						return this.rawEmails.filter(
+							e =>
+								!e.archived &&
+								(e.subject.toLowerCase().includes(query) ||
+									e.body.toLowerCase().includes(query))
+						);
+					}
+				},
 				data: {
 					searchQuery: '',
-					emails: [
+					rawEmails: [
 						{
 							id: 1,
 							sender: { name: 'Jane Doe', email: 'janedoe@gmail.com' },
@@ -81,7 +92,8 @@
 								'Necessary ye contented newspaper zealously breakfast he prevailed. Melancholy middletons yet understood decisively boy law she.',
 							sent: '7:11 AM',
 							selected: false,
-							starred: false
+							starred: false,
+							archived: false
 						},
 						{
 							id: 2,
@@ -91,11 +103,33 @@
 								'Expenses as material breeding insisted building to in. Continual so distrusts pronounce by unwilling listening. ',
 							sent: '8:12 AM',
 							selected: false,
-							starred: false
+							starred: false,
+							archived: false
+						},
+						{
+							id: 3,
+							sender: { name: 'Jake Peralta', email: 'takeperalta@gmail.com' },
+							subject: 'Quantum expenses',
+							body:
+								'Expenses as material breeding insisted building to in. Continual so distrusts pronounce by unwilling listening. ',
+							sent: '8:12 AM',
+							selected: false,
+							starred: false,
+							archived: false
+						},
+						{
+							id: 4,
+							sender: { name: 'Wade Derby', email: 'wadederby@gmail.com' },
+							subject: 'Differential load expenses',
+							body:
+								'Expenses as material breeding insisted building to in. Continual so distrusts pronounce by unwilling listening. ',
+							sent: '8:12 AM',
+							selected: false,
+							starred: false,
+							archived: false
 						}
 					]
 				},
-				computed: {},
 				methods: {
 					starredSrc(starred) {
 						return starred
@@ -103,16 +137,23 @@
 							: 'https://image.flaticon.com/icons/svg/25/25291.svg';
 					},
 					starEmail(index) {
-						this.emails[index].starred = true;
+						this.rawEmails[index].starred = true;
 					},
 					unstarEmail(index) {
-						this.emails[index].starred = false;
-						console.log('unstar');
+						this.rawEmails[index].starred = false;
+					},
+					performSearch(query) {
+						this.searchQuery = query;
 					}
 				},
 				created() {
 					wvcat.addCustomCommand('email', 'star email', this.starEmail);
 					wvcat.addCustomCommand('email', 'unstar email', this.unstarEmail);
+					wvcat.addCustomCommand(
+						'search-input',
+						'search for emails containing *query',
+						this.performSearch
+					);
 				}
 			});
 
