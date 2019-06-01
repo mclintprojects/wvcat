@@ -1,4 +1,4 @@
-function setupWebpage() {
+function setup() {
 	const elements = [];
 	document.querySelectorAll('*').forEach(e => {
 		if (
@@ -33,9 +33,15 @@ function getNameOfElement(htmlElement) {
 }
 
 function getMeaningfulNameForElement(htmlElement) {
-	const name = getNameOfElement(htmlElement)
+	const nameArray = getNameOfElement(htmlElement)
 		.toLowerCase()
-		.replace(' ', '-');
+		.replace(/ /gi, '-')
+		.replace(/[^-\w]/gi, '')
+		.split('-');
+
+	const name =
+		nameArray.length > 2 ? nameArray.substring(0, 1) : nameArray.substring(0);
+
 	let suffix = '';
 
 	switch (htmlElement.localName) {
@@ -76,4 +82,4 @@ function generateRandomName() {
 	});
 }
 
-setupWebpage();
+window.onload = setup;
