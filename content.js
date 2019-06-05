@@ -1,5 +1,7 @@
 function setup() {
 	const elements = [];
+	const customizer = new Customizer();
+
 	document.querySelectorAll('*').forEach(e => {
 		if (
 			e.localName == 'a' ||
@@ -7,7 +9,9 @@ function setup() {
 			e.localName == 'input' ||
 			e.localName == 'button' ||
 			e.localName == 'li' ||
-			e.localName == 'textarea'
+			e.localName == 'textarea' ||
+			e.getAttribute('tabindex') ||
+			e.getAttribute('contenteditable')
 		)
 			elements.push(e);
 	});
@@ -20,6 +24,8 @@ function setup() {
 		);
 	});
 
+	customizer.customize(window.location.href);
+
 	wvcat.initialize();
 }
 
@@ -29,7 +35,7 @@ function getNameOfElement(htmlElement) {
 	const name = htmlElement.name;
 	const innerText = htmlElement.innerText;
 
-	return title || name || ariaLabel || innerText || generateRandomName();
+	return ariaLabel || title || name || innerText || generateRandomName();
 }
 
 function getMeaningfulNameForElement(htmlElement) {
@@ -55,7 +61,7 @@ function getMeaningfulNameForElement(htmlElement) {
 
 		case 'input':
 			const type = htmlElement.getAttribute('type');
-			suffix = type == 'submit' ? 'button' : 'input';
+			suffix = type == 'submit' || type == 'reset' ? 'button' : 'input';
 			break;
 
 		case 'li':
@@ -67,6 +73,7 @@ function getMeaningfulNameForElement(htmlElement) {
 			break;
 
 		case 'button':
+		default:
 			suffix = 'button';
 			break;
 	}
