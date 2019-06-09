@@ -1,3 +1,43 @@
+chrome.runtime.onMessage.addListener((message, sender, response) => {
+	console.log(message);
+	switch (message.type) {
+		case 'disable_page':
+			message.action == 'add' ? addUrl(message.url) : removeUrl(message.url);
+			break;
+
+		case 'disable_domain':
+			if (message.url.length > 0) {
+				const domain = /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n?]+)/gim.match(
+					message.url
+				)[0];
+				addUrl(domain);
+			}
+			break;
+	}
+});
+
+function addUrl(url) {
+	chrome.storage.sync.get('blockedList', result => {
+		const blockedList = result.blockedList || [];
+		console.log(JSON.stringify(blockedList));
+		if (!blockedList.includes(url)) blockedList.push(url);
+		chrome.storage.sync.set({ blockedList }, () =>
+			console.log('blocklist saved')
+		);
+	});
+}
+
+function removeUrl(url) {
+	chrome.storage.sync.get('blockedList', result => {
+		const blockedList = result.blockedList || [];
+		const index = blockedList.indexOf(url);
+		if (index != -1) blockedList.splice(index, 1);
+		chrome.storage.sync.set({ blockedList }, () =>
+			console.log('blockList removed')
+		);
+	});
+}
+
 function setup() {
 	const elements = [];
 	const customizer = new Customizer();

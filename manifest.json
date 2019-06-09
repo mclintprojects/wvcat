@@ -2,11 +2,18 @@
 	"manifest_version": 2,
 	"name": "WVCAT",
 	"version": "0.1",
-	"browser_action": { "default_icon": "wvcat.png" },
+	"browser_action": {
+		"default_icon": "wvcat.png",
+		"default_popup": "popup.html"
+	},
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
 			"js": ["wvcat.js", "content.js", "customizer.js"]
 		}
-	]
+	],
+	"background": {
+		"scripts": ["background.js"]
+	},
+	"permissions": ["storage", "tabs"]
 }

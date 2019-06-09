@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>WVCAT</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+				box-sizing: border-box;
+			}
+
+			:root {
+				font-size: 62.5%;
+			}
+
+			body {
+				width: 30rem;
+				background: #fdfdfd;
+				font-family: 'Arial', sans-serif;
+			}
+
+			.title {
+				display: flex;
+				align-items: center;
+				width: 100%;
+				background: white;
+				padding: 1.6rem;
+				border-bottom: 0.1rem solid #eeeeee;
+			}
+
+			.title img {
+				width: 2rem;
+				height: 2rem;
+				margin-right: 0.8rem;
+			}
+
+			.title p {
+				font-weight: bold;
+				font-size: 1.6rem;
+			}
+
+			table {
+				padding: 1.6rem;
+				font-size: 1.4rem;
+				color: rgba(0, 0, 0, 0.54);
+				width: 100%;
+			}
+
+			tbody tr {
+				width: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			}
+
+			tbody td {
+				padding: 0.8rem 0;
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<div class="title">
+				<img src="wvcat.png" alt="wvcat_logo" />
+				<p>WVCAT</p>
+			</div>
+			<table>
+				<tbody>
+					<tr>
+						<td><label for="pageCbox">Don't run on this page</label></td>
+						<td>
+							<input
+								type="checkbox"
+								id="pageCbox"
+								aria-label="don't run on this page"
+							/>
+						</td>
+					</tr>
+					<tr>
+						<td><label for="domainCbox">Don't run on this domain</label></td>
+						<td>
+							<input
+								type="checkbox"
+								id="domainCbox"
+								aria-label="don't run on this domain"
+							/>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</main>
+		<script src="popup.js"></script>
+	</body>
+</html>
