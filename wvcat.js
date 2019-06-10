@@ -42,6 +42,7 @@
 	this.execute = command => executeCommand(command);
 
 	this.addCustomCommand = (control, command, callback) => {
+		console.log(command);
 		command = command.toLowerCase();
 		const regex = commandToRegExp(command);
 		customCommands.push({

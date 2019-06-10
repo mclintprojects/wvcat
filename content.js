@@ -40,7 +40,7 @@ function removeUrl(url) {
 
 function setup() {
 	const elements = [];
-	const customizer = new Customizer();
+	new Plugin().initialize(wvcat, window.location.href);
 
 	document.querySelectorAll('*').forEach(e => {
 		if (
@@ -63,8 +63,6 @@ function setup() {
 			getMeaningfulNameForElement(e)
 		);
 	});
-
-	customizer.customize(window.location.href);
 
 	wvcat.initialize();
 }
