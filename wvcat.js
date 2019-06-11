@@ -42,7 +42,6 @@
 	this.execute = command => executeCommand(command);
 
 	this.addCustomCommand = (control, command, callback) => {
-		console.log(command);
 		command = command.toLowerCase();
 		const regex = commandToRegExp(command);
 		customCommands.push({
@@ -51,6 +50,7 @@
 			callback,
 			command
 		});
+		console.log(callback);
 	};
 
 	// ---- END PUBLIC FUNCTIONS ----
@@ -94,16 +94,20 @@
 
 	function attachRecognitionContainerToDocument() {
 		card = document.createElement('div');
-		card.setAttribute('role', 'alert');
-		card.setAttribute('aria-live', 'assertive');
 		card.classList.add('wvcat-container');
 
 		recognitionText = document.createElement('p');
 		recognitionText.appendChild(document.createTextNode(''));
+		recognitionText.setAttribute('role', 'alert');
+		recognitionText.setAttribute('aria-live', 'assertive');
+
 		card.appendChild(recognitionText);
 
 		indicatorText = document.createElement('p');
 		indicatorText.appendChild(document.createTextNode(''));
+		indicatorText.setAttribute('role', 'alert');
+		indicatorText.setAttribute('aria-live', 'assertive');
+
 		card.appendChild(indicatorText);
 
 		const style = document.createElement('style');
@@ -190,6 +194,7 @@
 		recognizer = new SpeechRecognition();
 		recognizer.lang = _options.lang;
 		recognizer.onstart = () => {
+			recognitionText.innerText = '';
 			indicatorText.innerText = 'Listening for your command...';
 			speechRecognizerRunning = true;
 		};
@@ -267,7 +272,7 @@
 	}
 
 	function handleCustomCommand(keyword, words) {
-		const nearestKeywordMatch = nearestMatch(keyword, wvcatKeywords);
+		const nearestKeywordMatch = nearestMatch(keyword, wvcatKeywords, 4);
 		if (nearestKeywordMatch)
 			executeCommand(`${nearestKeywordMatch} ${words.substring(1)}`);
 		else executeCustomCommand(words.substring(0));
@@ -283,16 +288,20 @@
 			if (commandExists) break;
 		}
 
+		console.log({ commandExists });
 		if (commandExists) {
 			const result = command.regex.exec(transcript);
 			const control = controls[currentControlIndex];
 			control.meta
 				? command.callback.call(this, control.meta, ...result.slice(1))
 				: command.callback.apply(this, result.slice(1));
+
+			setSuccessExecutionMessage();
 		} else {
 			const nearestCommandMatch = nearestMatch(
 				transcript,
-				customCommands.map(c => c.command)
+				customCommands.map(c => c.command),
+				3
 			);
 
 			if (nearestCommandMatch) {
@@ -418,9 +427,14 @@
 			if (words.length == 1) {
 				if (currentControl.localName != 'a')
 					throw new Error('Invalid intent on element.');
-				window.location.replace(control.href);
+				window.location.replace(currentControl.href);
 			} else {
-				if (control && control.localName == 'a' && target == 'new tab') {
+				const target = words.substring(2);
+				if (
+					currentControl &&
+					currentControl.localName == 'a' &&
+					target == 'new tab'
+				) {
 					window.open(control.href);
 				} else throw new Error('Invalid link navigation intent command.');
 			}
