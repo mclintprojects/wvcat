@@ -272,7 +272,7 @@
 	}
 
 	function handleCustomCommand(keyword, words) {
-		const nearestKeywordMatch = nearestMatch(keyword, wvcatKeywords, 4);
+		const nearestKeywordMatch = nearestMatch(keyword, wvcatKeywords);
 		if (nearestKeywordMatch)
 			executeCommand(`${nearestKeywordMatch} ${words.substring(1)}`);
 		else executeCustomCommand(words.substring(0));
@@ -301,7 +301,6 @@
 			const nearestCommandMatch = nearestMatch(
 				transcript,
 				customCommands.map(c => c.command),
-				3
 			);
 
 			if (nearestCommandMatch) {
