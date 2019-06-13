@@ -24,11 +24,10 @@ function disableOnDomain() {
 	});
 }
 
-chrome.runtime.getBackgroundPage(
-	bg =>
-		(bg.onTabChange = function(info) {
-			console.log('popup ontabchange received');
-			domainCbox.checked = info.domainDisabled;
-			pageCbox.checked = info.pageDisabled;
-		})
-);
+chrome.runtime.getBackgroundPage(function(bg) {
+	bg.onTabChange = function(info) {
+		console.log('popup ontabchange received');
+		domainCbox.checked = info.domainDisabled;
+		pageCbox.checked = info.pageDisabled;
+	};
+});
