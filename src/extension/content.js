@@ -99,7 +99,26 @@ function getMeaningfulNameForElement(htmlElement) {
 
 		case 'input':
 			const type = htmlElement.getAttribute('type');
-			suffix = type == 'submit' || type == 'reset' ? 'button' : 'input';
+			switch (type) {
+				case ('submit', 'reset'):
+					suffix = 'button';
+					break;
+
+				case 'file':
+					suffix = 'file-picker';
+					break;
+
+				case 'checkbox':
+					suffix = 'checkbox';
+					break;
+
+				case 'radio':
+					suffix = 'radio-button';
+					break;
+
+				default:
+					suffix = 'input';
+			}
 			break;
 
 		case 'li':
