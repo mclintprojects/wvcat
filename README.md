@@ -12,7 +12,7 @@ Rather than wait on developers to start adopting the library and eventually have
 
 After WVCAT is installed into a browser, on any page a user navigates to, WVCAT queries for _controllable elements_ using the HTML DOM API. To WVCAT, controllable elements are HTML elements that can obtain focus. These include _buttons, links, radio buttons, checkboxes, file pickers, dropdowns, text inputs, and contenteditable or focusable divs and list items_.
 
-WVCAT then attempts to assign meaningful names to those controllable elements. It does this by checking for the content of the element's **aria-label** attribute, **title** attribute, **name** attribute or **innerText**. If all these sources to yield a name, it generates and assigns a random name to the element. WVCAT also goes on to attach a suffix to the names of element so that the language of issued speech commands are more natural. Example, for an HTML select element with its aria-label attribute set to "age", WVCAT will assign "age dropdown" to that element so issued speech commands can go like "Select age dropdown".
+WVCAT then attempts to assign meaningful names to those controllable elements. It does this by checking for the content of the element's **aria-label** attribute, **title** attribute, **name** attribute or **innerText**. If all these sources fail to yield a name, it generates and assigns a random name to the element. WVCAT also goes on to attach a suffix to the names of element so that the language of issued speech commands will feel natural. For example, an HTML button element with its aria-label attribute set to "submit" will have WVCAT assign "submit button" to it as a name. Speech commands for that element will then be something like "Click submit button".
 
 Below is a table containing the suffixes of the various controllable elements.
 
@@ -31,7 +31,7 @@ Below is a table containing the suffixes of the various controllable elements.
 | input               | input        |
 | textarea            | input        |
 
-At this point, WVCAT then initializes the speech recognition engine but only if your browser has full support for the speechRecognition API. Currently supported browsers are Chrome, Opera, and _soon_ Microsoft Edge. WVCAT attaches a white "response container" to the bottom of every web page and this is where it outputs the results of your speech commands or any other signifiers. If this never shows up, your browser does not work with WVCAT.
+At this point, WVCAT initializes the speech recognition engine but only if your browser has full support for the speechRecognition API. Currently supported browsers are Chrome, Opera, and _soon_ Microsoft Edge. WVCAT attaches a white "response container" to the bottom of every web page and this is where it outputs the results of your speech commands or any other signifiers. If this never shows up, your browser does not work with WVCAT.
 
 **NB: The contents of the WVCAT response container can and will be read out by any screenreader you have installed.**
 
