@@ -2,7 +2,7 @@
 
 WVCAT is a modest attempt at speech-based assistive capabilities for the Web. It started as a JavaScript library that developers could integrate into their web page and with little additional coding have speech-based assistive capabilities up and running.
 
-The flaw with WVCAT originally being a JavaScript library was that its usefulness was more towards developers than the end-users I envisioned (users with visual impairements, mobility issues, poor hand-eye coordination, or repetitive strain injuries). My thinking then was that if the library gained wide-enough adoption owing to its ease-of-setup, the benefits would trickle down. Sure, that might have been possible but it would have taken a long time.
+The flaw with WVCAT originally being a JavaScript library was that its usefulness was more towards developers than the end-users I envisioned (users with visual impairments, mobility issues, poor hand-eye coordination, or repetitive strain injuries). My thinking then was that if the library gained wide-enough adoption owing to its ease-of-setup, the benefits would trickle down. Sure, that might have been possible but it would have taken a long time.
 
 That line of thinking then got me wondering how exactly I could make the idea **immediately useful** to end-users. I thought of making a speech-controlled shopping app, email app, and flight booking app before the idea of making a browser extension popped into my head.
 
@@ -56,3 +56,10 @@ Armed with that information, you can now get started with issuing speech command
 | Click    | Clicks on an already focused on controllable element                                                |
 | Open     | Opens an already focused on controllable element                                                    |
 | Clear    | Clears any text entry in an already focused on controllable input element                           |
+
+## Installing WVCAT
+1. Clone this project to your computer. Alternatively, download the zip file of this project to your computer. Once downloaded, unzip it to a location of your choice.
+2. Launch Google Chrome and navigate to **chrome://extensions**.
+3. At the top right of the page you just navigated to, find and turn on Developer mode.
+4. The option for you to load an unpacked extension should now be available to you. Click on "Load unpacked" and choose the folder where you cloned or unzipped WVCAT to.
+5. WVCAT should now be installed in your browser. Refresh any existing tabs and WVCAT should correctly initialize in the page.
