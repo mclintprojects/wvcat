@@ -1,10 +1,10 @@
 # WVCAT
 
-WVCAT is a modest attempt at speech-based assistive capabilities for the Web. It started as a JavaScript library that developers could integrate into their web page and with little additional coding have speech-based assistive capabilities up and running.
+WVCAT is a modest attempt at speech-based assistive capabilities for any web page. It started as a JavaScript library that developers could integrate into their web page and with little additional coding have speech-based assistive capabilities up and running.
 
 The flaw with WVCAT originally being a JavaScript library was that its usefulness was more towards developers than the end-users I envisioned (users with visual impairments, mobility issues, poor hand-eye coordination, or repetitive strain injuries). My thinking then was that if the library gained wide-enough adoption owing to its ease-of-setup, the benefits would trickle down. Sure, that might have been possible but it would have taken a long time.
 
-That line of thinking then got me wondering how exactly I could make the idea **immediately useful** to end-users. I thought of making a speech-controlled shopping app, email app, and flight booking app before the idea of making a browser extension popped into my head.
+That line of thinking then got me wondering how exactly I could make the idea **immediately useful** to end-users. I thought of making a speech-based shopping app, email app, and flight booking app before the idea of making a browser extension popped into my head.
 
 Rather than wait on developers to start adopting the library and eventually have the benefits trickle down to the end-users, I can now inject it into any web page with a browser extension. Instant wide-adoption, immediate utility to end-users.
 
