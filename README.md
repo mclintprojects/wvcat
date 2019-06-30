@@ -80,3 +80,6 @@ WVCAT enables custom commands via community contributed plugins you can find <a 
 5. WVCAT should now be installed in your browser. Refresh any existing tabs and WVCAT should correctly initialize in the page.
 
 **NB: This browser extension will soon be uploaded to the Chrome extension store.**
+
+## Demo
+[![wvcat_demo](https://img.youtube.com/vi/SuRRpdb21ac/0.jpg)](https://www.youtube.com/watch?v=SuRRpdb21ac)
