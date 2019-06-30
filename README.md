@@ -43,7 +43,7 @@ To issue speech commands, you need to know both the available commands and also 
 
 To know the available commands, focus on any controllable element and say "Show reference". Remember to always press the push-to-talk key before issuing a speech command.
 
-To know the names WVCAT has assigned to the controllable elements on a web page, you can navigate normally using the Tab key. Each time a controllable element gains focus, WVCAT reads and displays the name it assigned to it.
+To know the names WVCAT has assigned to the controllable elements on a web page, you can navigate normally using the Tab or Shift + Tab. Each time a controllable element gains focus, WVCAT reads and displays the name it assigned to it.
 
 Armed with that information, you can now get started with issuing speech commands. Below is an exhaustive list of the possible commands provided out-of-the-box.
 
@@ -59,7 +59,7 @@ Armed with that information, you can now get started with issuing speech command
 
 ### Custom commands
 
-In addition to the capabilities WVCAT provides out-of-the-box, it also allows a user to issue custom speech commands. These commands are usually domain-specific and aim at making a workflow entirely possible solely using speech.
+In addition to the capabilities WVCAT provides out-of-the-box, it also allows a user to issue custom speech commands. These commands are usually domain-specific and aim at making a (complex) workflow possible solely using speech.
 
 Custom commands can contain parameters; **named** or **splat**. You can have multiple named parameters in a command but only one splat parameter.
 
@@ -69,7 +69,7 @@ This will match speech commands like "Search for gray dogs" or "Search for big d
 _**Splat parameter example: ("Search for \*query")**_<br>
 This will match speech commands like "Search for blue dogs on a lawn" or "Search for white shoes".
 
-WVCAT enables custom commands via community contributed plugins you can find <a href="https://github.com/mclintprojects/wvcat-plugins">here</a>. End-users are encourage to suggest possible custom commands and the WVCAT plugin community (myself included) will implement them as and when we are able to.
+WVCAT enables custom commands via community contributed plugins you can find <a href="https://github.com/mclintprojects/wvcat-plugins">here</a>. End-users are encouraged to suggest possible custom commands and the WVCAT plugin community (myself included) will implement them as and when we are able to.
 
 ## Installing WVCAT
 
@@ -78,3 +78,5 @@ WVCAT enables custom commands via community contributed plugins you can find <a 
 3. At the top right of the page you just navigated to, find and turn on Developer mode.
 4. The option for you to load an unpacked extension should now be available to you. Click on "Load unpacked" and choose the folder where you cloned or unzipped WVCAT to.
 5. WVCAT should now be installed in your browser. Refresh any existing tabs and WVCAT should correctly initialize in the page.
+
+**NB: This browser extension will soon be uploaded to the Chrome extension store.**
