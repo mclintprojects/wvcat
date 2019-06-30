@@ -41,7 +41,7 @@ After initialization, WVCAT then waits for you to press the push-to-talk key whi
 
 To issue speech commands, you need to know both the available commands and also the names of the elements those commands will target.
 
-To know the available commands, focus on a controllable element and say "Show reference". Remember to always press the push-to-talk key before issuing a speech command.
+To know the available commands, focus on any controllable element and say "Show reference". Remember to always press the push-to-talk key before issuing a speech command.
 
 To know the names WVCAT has assigned to the controllable elements on a web page, you can navigate normally using the Tab key. Each time a controllable element gains focus, WVCAT reads and displays the name it assigned to it.
 
@@ -54,10 +54,25 @@ Armed with that information, you can now get started with issuing speech command
 | Select X | Finds and places focus on a controllable element named X                                            |
 | Click X  | Finds and clicks on a controllable element named X                                                  |
 | Click    | Clicks on an already focused on controllable element                                                |
-| Open     | Opens an already focused on controllable element                                                    |
+| Open     | Opens an already focused on controllable link                                                       |
 | Clear    | Clears any text entry in an already focused on controllable input element                           |
 
+### Custom commands
+
+In addition to the capabilities WVCAT provides out-of-the-box, it also allows a user to issue custom speech commands. These commands are usually domain-specific and aim at making a workflow entirely possible solely using speech.
+
+Custom commands can contain parameters; **named** or **splat**. You can have multiple named parameters in a command but only one splat parameter.
+
+_**Named parameter example: "Search for **:color** dogs"**_
+This will match speech commands like "Search for blue dogs" and pass **blue** to the command match callback function.
+
+_**Splat parameter example: "Search for \*query"**_
+This will match speech commands like "Search for blue dogs on a lawn" and pass "blue dogs on a lawn" to the command match callback function.
+
+WVCAT enables custom commands via community contributed plugins you can find <a href="https://github.com/mclintprojects/wvcat-plugins">here</a>. End-users are encourage to suggest possible custom commands and the WVCAT plugin community (myself included) will implement them as and when we are able to.
+
 ## Installing WVCAT
+
 1. Clone this project to your computer. Alternatively, download the zip file of this project to your computer. Once downloaded, unzip it to a location of your choice.
 2. Launch Google Chrome and navigate to **chrome://extensions**.
 3. At the top right of the page you just navigated to, find and turn on Developer mode.

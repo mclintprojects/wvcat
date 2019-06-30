@@ -71,7 +71,7 @@ function getNameOfElement(htmlElement) {
 	const ariaLabel = htmlElement.getAttribute('aria-label');
 	const title = htmlElement.getAttribute('title');
 	const name = htmlElement.name;
-	const innerText = htmlElement.innerText;
+	const innerText = htmlElement.text.trim();
 
 	return ariaLabel || title || name || innerText || generateRandomName();
 }
