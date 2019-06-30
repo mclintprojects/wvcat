@@ -63,11 +63,11 @@ In addition to the capabilities WVCAT provides out-of-the-box, it also allows a 
 
 Custom commands can contain parameters; **named** or **splat**. You can have multiple named parameters in a command but only one splat parameter.
 
-_**Named parameter example: "Search for **:color** dogs"**_
-This will match speech commands like "Search for blue dogs" and pass **blue** to the command match callback function.
+_**Named parameter example: ("Search for **:query** dogs")**_<br>
+This will match speech commands like "Search for gray dogs" or "Search for big dogs".
 
-_**Splat parameter example: "Search for \*query"**_
-This will match speech commands like "Search for blue dogs on a lawn" and pass "blue dogs on a lawn" to the command match callback function.
+_**Splat parameter example: ("Search for \*query")**_<br>
+This will match speech commands like "Search for blue dogs on a lawn" or "Search for white shoes".
 
 WVCAT enables custom commands via community contributed plugins you can find <a href="https://github.com/mclintprojects/wvcat-plugins">here</a>. End-users are encourage to suggest possible custom commands and the WVCAT plugin community (myself included) will implement them as and when we are able to.
 
